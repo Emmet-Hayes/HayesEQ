@@ -23,7 +23,7 @@ void IIRFilterAudioProcessor::prepareToPlay(double sr, int samplesPerBlock)
 }
 
 
-void IIRFilterAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midi)
+void IIRFilterAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& /*midi*/)
 {
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
