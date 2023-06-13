@@ -3,7 +3,7 @@
 #include "DemoUtilities.h"
 #include "DSPDemos_Common.h"
 
-constexpr int BAND_COUNT = 7;
+constexpr int MAX_BANDS = 10;
 
 class IIRFilterAudioProcessor : public juce::AudioProcessor
 {
@@ -26,7 +26,7 @@ public:
     AudioProcessorEditor* createEditor() override;
     void getStateInformation(juce::MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
-
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void updateParameters();
     
     ProcessorDuplicator<IIR::Filter<float>, IIR::Coefficients<float>> iir;

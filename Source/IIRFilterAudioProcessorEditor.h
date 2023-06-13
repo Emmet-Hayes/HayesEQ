@@ -5,15 +5,21 @@
 class IIRFilterBandComponent;
 
 class IIRFilterAudioProcessorEditor : public juce::AudioProcessorEditor
+                                    , private juce::ComboBox::Listener
 {
 public:
     IIRFilterAudioProcessorEditor(IIRFilterAudioProcessor& p);
+    ~IIRFilterAudioProcessorEditor();
 
     void paint(juce::Graphics&) override;
     void resized() override;
+    void comboBoxChanged(ComboBox* comboBox) override;
 
 private:
     void addAllPanelComponents();
+    void createIIRComboBox(int index, const char* guilabel, const char* treelabel, 
+                           const juce::StringArray& itemList, int defaultItem = 1);
+    void createIIRSliders(int index);
 
     IIRFilterAudioProcessor& processor;
     

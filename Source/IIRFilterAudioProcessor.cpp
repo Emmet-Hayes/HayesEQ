@@ -2,16 +2,27 @@
 #include "IIRFilterAudioProcessorEditor.h"
 
 IIRFilterAudioProcessor::IIRFilterAudioProcessor()
-: apvts (*this, nullptr, "PARAMETERS", {
-          std::make_unique<juce::AudioParameterChoice>("type0", "Type", juce::StringArray { "Peak", "Low-pass", "High-pass", "Band-pass" }, 0),
-          std::make_unique<juce::AudioParameterFloat>("frequency0", "Frequency", makeLogarithmicRange(20.0f, 20000.0f), 440.0f),
-          std::make_unique<juce::AudioParameterFloat>("q0", "Q", makeLogarithmicRange(0.1f, 20.0f), 1.0f),
-          std::make_unique<juce::AudioParameterFloat>("gain0", "Gain", -24.0f, 24.0f, 0.0f)//,
-          //std::make_unique<juce::AudioParameterInt>("numbands", "NumBands", 1, 10, 1)
-    })
+:   apvts (*this, nullptr, "PARAMETERS", createParameterLayout() )
 {
 }
 
+juce::AudioProcessorValueTreeState::ParameterLayout IIRFilterAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+    for (int i = 0; i < MAX_BANDS; ++i) 
+    {
+        std::string tstr = "type" + std::to_string(i);
+        std::string fstr = "frequency" + std::to_string(i);
+        std::string qstr = "q" + std::to_string(i);
+        std::string gstr = "gain" + std::to_string(i);
+        layout.add(std::make_unique<juce::AudioParameterChoice>(tstr, "Type", juce::StringArray{ "Peak", "Low-pass", "High-pass", "Band-pass" }, 0));
+        layout.add(std::make_unique<juce::AudioParameterFloat>(fstr, "Frequency", makeLogarithmicRange(20.0f, 20000.0f), 440.0f));
+        layout.add(std::make_unique<juce::AudioParameterFloat>(qstr, "Q", makeLogarithmicRange(0.1f, 20.0f), 1.0f));
+        layout.add(std::make_unique<juce::AudioParameterFloat>(gstr, "Gain", -24.0f, 24.0f, 0.0f));
+    }
+    layout.add(std::make_unique<juce::AudioParameterInt>("numbands", "NumBands", 1, 10, 1));
+    return layout;
+}
 
 void IIRFilterAudioProcessor::prepareToPlay(double sr, int samplesPerBlock)
 {
@@ -58,26 +69,26 @@ void IIRFilterAudioProcessor::updateParameters()
 {
     if (sampleRate != 0.0)
     {
-        //auto numBands = static_cast<int>(*apvts.getRawParameterValue("numbands"));
-        for (int i = 0; i < 1; ++i)
+        auto numBands = static_cast<int>(*apvts.getRawParameterValue("numbands"));
+        for (int i = 0; i < numBands; ++i)
         {
             std::string fstr = "frequency" + std::to_string(i);
             std::string qstr = "q" + std::to_string(i);
             std::string tstr = "type" + std::to_string(i);
             std::string gstr = "gain" + std::to_string(i);
             
-            auto cutoff = static_cast<float>(*apvts.getRawParameterValue(fstr));
+            auto frequency = static_cast<float>(*apvts.getRawParameterValue(fstr));
             auto qVal   = static_cast<float>(*apvts.getRawParameterValue(qstr));
             auto type = static_cast<int>(*apvts.getRawParameterValue(tstr));
             auto gain = static_cast<float>(*apvts.getRawParameterValue(gstr)); 
 
             switch (type)
             {
-                case 0: *iir.state = IIR::ArrayCoefficients<float>::makePeakFilter(sampleRate, cutoff, qVal, juce::Decibels::decibelsToGain(gain)); break;
-                case 1: *iir.state = IIR::ArrayCoefficients<float>::makeLowPass (sampleRate, cutoff, qVal); break;
-                case 2: *iir.state = IIR::ArrayCoefficients<float>::makeHighPass(sampleRate, cutoff, qVal); break;
-                case 3: *iir.state = IIR::ArrayCoefficients<float>::makeBandPass(sampleRate, cutoff, qVal); break;
-                default: break;
+                case 0: *iir.state = IIR::ArrayCoefficients<float>::makePeakFilter(sampleRate, frequency, qVal, juce::Decibels::decibelsToGain(gain)); break;
+                case 1: *iir.state = IIR::ArrayCoefficients<float>::makeLowPass (sampleRate, frequency, qVal); break;
+                case 2: *iir.state = IIR::ArrayCoefficients<float>::makeHighPass(sampleRate, frequency, qVal); break;
+                case 3: *iir.state = IIR::ArrayCoefficients<float>::makeBandPass(sampleRate, frequency, qVal); break;
+                default: *iir.state = IIR::ArrayCoefficients<float>::makePeakFilter(sampleRate, frequency, qVal, juce::Decibels::decibelsToGain(gain));
             }
         }
     }
