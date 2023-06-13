@@ -3,6 +3,8 @@
 #include "DemoUtilities.h"
 #include "DSPDemos_Common.h"
 
+constexpr int BAND_COUNT = 7;
+
 class IIRFilterAudioProcessor : public juce::AudioProcessor
 {
 public:
