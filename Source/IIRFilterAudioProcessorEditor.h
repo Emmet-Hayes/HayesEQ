@@ -5,7 +5,8 @@
 class IIRFilterBandComponent;
 
 class IIRFilterAudioProcessorEditor : public juce::AudioProcessorEditor
-                                    , private juce::ComboBox::Listener
+                                    , public juce::ComboBox::Listener
+                                    , private juce::Timer
 {
 public:
     IIRFilterAudioProcessorEditor(IIRFilterAudioProcessor& p);
@@ -14,6 +15,7 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override;
     void comboBoxChanged(ComboBox* comboBox) override;
+    void timerCallback() override;
 
 private:
     void addAllPanelComponents();

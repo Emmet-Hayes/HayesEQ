@@ -1,5 +1,5 @@
 #pragma once
-#include <JuceHeader.h>
+#include "LogSlider.h"
 
 class IIRFilterBandComponent
 {
@@ -17,8 +17,8 @@ public:
     }
     
     juce::ComboBox typeBox;
-    juce::Slider frequencySlider;
-    juce::Slider qSlider;
+    LogSlider frequencySlider;
+    LogSlider qSlider;
     juce::Slider gainSlider;
     
     juce::Label typeLabel;
