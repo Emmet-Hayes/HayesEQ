@@ -102,7 +102,10 @@ public:
         return l;
     }
 
-
+    juce::Font getLabelFont(juce::Label& label) override
+    {
+        return juce::Font(16.0f * windowScale);
+    }
     
     void setWindowScale(const float& newScale) { windowScale = newScale; }
 
