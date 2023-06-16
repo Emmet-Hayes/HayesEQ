@@ -21,6 +21,7 @@ void IIRFilterAudioProcessorEditor::addAllPanelComponents()
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     numBandsLabel.setText("Number of Bands", juce::dontSendNotification);
     numBandsLabel.setJustificationType(juce::Justification::centred);
+    numBandsLabel.setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(numBandsLabel);
     numBandsBox.addItemList({ "1", "2", "3", "4", "5", "6", "7", "8" }, 1);
     numBandsBox.setJustificationType(juce::Justification::centred);
@@ -58,6 +59,7 @@ void IIRFilterAudioProcessorEditor::createIIRComboBox(int index, const char* gui
     {
         filterBandComponents[index]->typeLabel.setText(guilabel, juce::dontSendNotification);
         filterBandComponents[index]->typeLabel.setJustificationType(juce::Justification::centred);
+        filterBandComponents[index]->typeLabel.setLookAndFeel(&customLookAndFeel);
         addAndMakeVisible(filterBandComponents[index]->typeLabel);
         filterBandComponents[index]->typeBox.addItemList(itemList, defaultItem);
         filterBandComponents[index]->typeBox.setJustificationType(juce::Justification::centred);
@@ -78,6 +80,7 @@ void IIRFilterAudioProcessorEditor::createIIRSliders(int index)
     {
         filterBandComponents[index]->frequencyLabel.setText("Frequency", juce::dontSendNotification);
         filterBandComponents[index]->frequencyLabel.setJustificationType(juce::Justification::centred);
+        filterBandComponents[index]->frequencyLabel.setLookAndFeel(&customLookAndFeel);
         addAndMakeVisible(filterBandComponents[index]->frequencyLabel);
         filterBandComponents[index]->frequencySlider.setSliderStyle(juce::Slider::LinearHorizontal);
         filterBandComponents[index]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
@@ -88,6 +91,7 @@ void IIRFilterAudioProcessorEditor::createIIRSliders(int index)
 
         filterBandComponents[index]->qLabel.setText("Q", juce::dontSendNotification);
         filterBandComponents[index]->qLabel.setJustificationType(juce::Justification::centred);
+        filterBandComponents[index]->qLabel.setLookAndFeel(&customLookAndFeel);
         addAndMakeVisible(filterBandComponents[index]->qLabel);
         filterBandComponents[index]->qSlider.setSliderStyle(juce::Slider::LinearHorizontal);
         filterBandComponents[index]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
@@ -98,6 +102,7 @@ void IIRFilterAudioProcessorEditor::createIIRSliders(int index)
 
         filterBandComponents[index]->gainLabel.setText("Gain", juce::dontSendNotification);
         filterBandComponents[index]->gainLabel.setJustificationType(juce::Justification::centred);
+        filterBandComponents[index]->gainLabel.setLookAndFeel(&customLookAndFeel);
         addAndMakeVisible(filterBandComponents[index]->gainLabel);
         filterBandComponents[index]->gainSlider.setSliderStyle(juce::Slider::LinearHorizontal);
         filterBandComponents[index]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
