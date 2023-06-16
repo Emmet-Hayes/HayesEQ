@@ -6,6 +6,9 @@
               id="pRVjbr" jucerFormatVersion="1" pluginFormats="buildAU,buildLV2,buildStandalone,buildVST3">
   <MAINGROUP id="BE1GVm" name="IIRFilter">
     <GROUP id="{CE2A1EFF-709F-E63D-44FF-CA2F032D66D5}" name="Source">
+      <FILE id="cCUZyb" name="IIRFilterBandComponent.h" compile="0" resource="0"
+            file="Source/IIRFilterBandComponent.h"/>
+      <FILE id="izaYWB" name="LogSlider.h" compile="0" resource="0" file="Source/LogSlider.h"/>
       <FILE id="tVxFY5" name="CustomLookAndFeel.h" compile="0" resource="0"
             file="Source/CustomLookAndFeel.h"/>
       <FILE id="vT4KGJ" name="IIRFilterAudioProcessorEditor.cpp" compile="1"
@@ -22,7 +25,7 @@
       <FILE id="scaNdg" name="DSPDemos_Common.h" compile="0" resource="0"
             file="Source/DSPDemos_Common.h"/>
     </GROUP>
-    <FILE id="w8ZOw0" name="bgfile.jpg" compile="0" resource="1" file="Images/bgfile.jpg"/>
+    <FILE id="eIH07U" name="bgfile.jpg" compile="0" resource="1" file="Images/bgfile.jpg"/>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
