@@ -37,6 +37,9 @@ void IIRFilterAudioProcessorEditor::addAllPanelComponents()
         createIIRSliders(i);
     }
   
+    spectrumPlotComponent = std::make_unique<SpectrumPlotComponent>();
+    addAndMakeVisible(spectrumPlotComponent.get());
+    
     image = juce::ImageCache::getFromMemory(BinaryData::bgfile_jpg, BinaryData::bgfile_jpgSize);
     
     resizerConstrainer = std::make_unique<juce::ComponentBoundsConstrainer>();
@@ -128,11 +131,10 @@ void IIRFilterAudioProcessorEditor::resized()
     int topButtonWidth = totalWidth * 0.2;
     int offset = (bandWidth - reducedWidth) / 2;
     int topButtonOffset = (totalWidth - topButtonWidth) / 2;
-    int topMargin = 140 * windowScaleH;
 
     numBandsLabel.setBounds(bounds.removeFromTop(20 * windowScaleH));
     numBandsBox.setBounds(bounds.removeFromTop(50 * windowScaleH).reduced(topButtonOffset, 0));
-    bounds.removeFromTop(topMargin);
+    spectrumPlotComponent->setBounds(bounds.removeFromTop(140 * windowScaleH));
 
     for (int i = 0; i < numBands; ++i)
     {
@@ -167,6 +169,9 @@ void IIRFilterAudioProcessorEditor::timerCallback()
         }
         resized();
     }
+    
+    auto fftData = processor.fftAnalyzer.getFftData();
+    spectrumPlotComponent->updatePlot(std::move(fftData));
 }
 
 void IIRFilterAudioProcessorEditor::comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged)

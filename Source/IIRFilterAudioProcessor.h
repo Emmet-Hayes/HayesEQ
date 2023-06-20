@@ -2,6 +2,7 @@
 #include <JuceHeader.h>
 #include "DemoUtilities.h"
 #include "DSPDemos_Common.h"
+#include "FFTAnalyzer.h"
 
 constexpr int MAX_BANDS = 8;
 
@@ -31,6 +32,8 @@ public:
     
     ProcessorDuplicator<IIR::Filter<float>, IIR::Coefficients<float>> iirs[MAX_BANDS];
 
+    FFTAnalyzer fftAnalyzer;
+    
     juce::AudioProcessorValueTreeState apvts;
     double sampleRate = 0.0;
 

@@ -45,6 +45,14 @@ void IIRFilterAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
     auto numBands = static_cast<int>(*apvts.getRawParameterValue("numbands"));
     for (int i = 0; i < numBands; ++i)
         iirs[i].process(context);
+        
+    auto totalNumInputChannels  = getTotalNumInputChannels();
+    auto totalNumOutputChannels = getTotalNumOutputChannels();
+    for (int i = 0; i < totalNumInputChannels; ++i)
+    {
+        auto* channelData = buffer.getReadPointer(i);
+        fftAnalyzer.pushNextSampleIntoFifo(*channelData);
+    }
 }
 
 
