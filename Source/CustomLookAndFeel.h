@@ -52,6 +52,7 @@ public:
             g.fillAll(juce::Colours::silver);
 
         g.setColour(isHighlighted ? juce::Colours::black : juce::Colours::white);
+        g.setFont(juce::Font(16.0f * windowScale));
         g.drawText(text, area, juce::Justification::centred);
     }
     
@@ -79,7 +80,7 @@ public:
         
         g.drawRect (label.getLocalBounds());
     }
-    
+
     juce::Label* createSliderTextBox(juce::Slider& slider) override
     {
         auto* l = new CentredLabel();
@@ -106,7 +107,7 @@ public:
     {
         return juce::Font(16.0f * windowScale);
     }
-    
+
     void setWindowScale(const float& newScale) { windowScale = newScale; }
 
 private:

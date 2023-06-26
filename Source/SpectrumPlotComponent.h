@@ -7,38 +7,37 @@ public:
 
     void paint(juce::Graphics& g) override
     {
-        // Clear the background
-        g.fillAll(juce::Colours::black);
-
-        // Draw grid lines
-        g.setColour(juce::Colours::grey);
-        int numGridLines = 10;
-        for (int i = 1; i < numGridLines; ++i)
-        {
-            float x = static_cast<float>(i) / numGridLines * getWidth();
-            float y = static_cast<float>(i) / numGridLines * getHeight();
-            g.drawLine(x, 0, x, getHeight());  // Vertical line
-            g.drawLine(0, y, getWidth(), y);  // Horizontal line
-        }
-
-        // Draw the spectrum
+        /*
+        g.fillAll (juce::Colours::black);
         g.setColour(juce::Colours::white);
-        for (int i = 1; i < fftData.size(); ++i)
+
+        if (frequencyResponseData.empty())
+            return;
+
+        auto area = getLocalBounds();
+        auto w = area.getWidth();
+        auto h = area.getHeight();
+        auto binWidth = w / float(frequencyResponseData.size());
+
+        for (size_t i = 0; i < frequencyResponseData.size() - 1; ++i)
         {
-            auto x1 = juce::jmap(static_cast<float>(i - 1), 0.0f, static_cast<float>(fftData.size()), 0.0f, static_cast<float>(getWidth()));
-            auto x2 = juce::jmap(static_cast<float>(i), 0.0f, static_cast<float>(fftData.size()), 0.0f, static_cast<float>(getWidth()));
-            auto y1 = juce::jmap(juce::jlimit(-1.0f, 1.0f, fftData[i - 1]), -1.0f, 1.0f, static_cast<float>(getHeight()), 0.0f);
-            auto y2 = juce::jmap(juce::jlimit(-1.0f, 1.0f, fftData[i]), -1.0f, 1.0f, static_cast<float>(getHeight()), 0.0f);
-            g.drawLine(x1, y1, x2, y2);
+            auto x1 = binWidth * i;
+            auto y1 = juce::jmap(frequencyResponseData[i], 0.0f, 1.0f, float(h), 0.0f);
+
+            auto x2 = binWidth * (i + 1);
+            auto y2 = juce::jmap(frequencyResponseData[i + 1], 0.0f, 1.0f, float(h), 0.0f);
+
+            g.drawLine(x1, y1, x2, y2, 2.0f);
         }
+        */
     }
 
-    void updatePlot(std::array<float, 2048>&& fftDataToUse)
+    void updatePlot(std::vector<float>&& frDataToUse)
     {
-        fftData = std::move(fftDataToUse);
-        repaint();
+        /*frequencyResponseData = std::move(frDataToUse);
+        repaint();*/
     }
 
 private:
-    std::array<float, 2048> fftData;
+    //std::vector<float> frequencyResponseData;
 };

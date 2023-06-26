@@ -1,10 +1,8 @@
 #pragma once
 #include <JuceHeader.h>
-#include "DemoUtilities.h"
-#include "DSPDemos_Common.h"
-#include "FFTAnalyzer.h"
 
 constexpr int MAX_BANDS = 8;
+constexpr int FREQUENCY_POINTS = 128;
 
 class IIRFilterAudioProcessor : public juce::AudioProcessor
 {
@@ -29,10 +27,14 @@ public:
     void setStateInformation(const void* data, int sizeInBytes) override;
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void updateParameters();
+    void calculateFrequencyResponse();
+    std::vector<double> generateLogSpace(double start, double end, int points);
+    std::vector<std::vector<float>> getFrequencyResponse();
     
-    ProcessorDuplicator<IIR::Filter<float>, IIR::Coefficients<float>> iirs[MAX_BANDS];
-
-    FFTAnalyzer fftAnalyzer;
+    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> iirs[MAX_BANDS];
+    
+    std::vector<std::vector<float>> frequencyResponse;
+    juce::ReadWriteLock frequencyResponseLock;
     
     juce::AudioProcessorValueTreeState apvts;
     double sampleRate = 0.0;

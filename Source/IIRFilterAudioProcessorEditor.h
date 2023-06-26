@@ -33,7 +33,7 @@ private:
     juce::ComboBox numBandsBox;
     juce::Label numBandsLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> numBandsAttachment;
-    int numBands = 1;
+    int numBands = 8;
     
     std::unique_ptr<juce::ResizableCornerComponent> resizer;
     std::unique_ptr<juce::ComponentBoundsConstrainer> resizerConstrainer;

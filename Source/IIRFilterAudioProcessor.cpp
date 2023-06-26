@@ -1,5 +1,6 @@
 #include "IIRFilterAudioProcessor.h"
 #include "IIRFilterAudioProcessorEditor.h"
+#include "Utilities.h"
 
 IIRFilterAudioProcessor::IIRFilterAudioProcessor()
 :   apvts (*this, nullptr, "PARAMETERS", createParameterLayout() )
@@ -45,14 +46,6 @@ void IIRFilterAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
     auto numBands = static_cast<int>(*apvts.getRawParameterValue("numbands"));
     for (int i = 0; i < numBands; ++i)
         iirs[i].process(context);
-        
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-    for (int i = 0; i < totalNumInputChannels; ++i)
-    {
-        auto* channelData = buffer.getReadPointer(i);
-        fftAnalyzer.pushNextSampleIntoFifo(*channelData);
-    }
 }
 
 
@@ -62,14 +55,14 @@ AudioProcessorEditor* IIRFilterAudioProcessor::createEditor()
 }
 
 
-void IIRFilterAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+void IIRFilterAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
     if (auto xml = apvts.state.createXml())
         copyXmlToBinary(*xml, destData);
 }
 
 
-void IIRFilterAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void IIRFilterAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
     if (auto xml = getXmlFromBinary(data, sizeInBytes))
         if (xml->hasTagName(apvts.state.getType()))
@@ -96,17 +89,51 @@ void IIRFilterAudioProcessor::updateParameters()
 
             switch (type)
             {
-                case 0: *iirs[i].state = IIR::ArrayCoefficients<float>::makeBandPass(sampleRate, frequency, qVal); break;
-                case 1: *iirs[i].state = IIR::ArrayCoefficients<float>::makePeakFilter(sampleRate, frequency, qVal, juce::Decibels::decibelsToGain(gain)); break;
-                case 2: *iirs[i].state = IIR::ArrayCoefficients<float>::makeLowPass (sampleRate, frequency, qVal); break;
-                case 3: *iirs[i].state = IIR::ArrayCoefficients<float>::makeHighPass(sampleRate, frequency, qVal); break;
-
-                default: *iirs[i].state = IIR::ArrayCoefficients<float>::makePeakFilter(sampleRate, frequency, qVal, juce::Decibels::decibelsToGain(gain));
+                case 0: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makeBandPass(sampleRate, frequency, qVal); break;
+                case 1: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makePeakFilter(sampleRate, frequency, qVal, juce::Decibels::decibelsToGain(gain)); break;
+                case 2: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makeLowPass (sampleRate, frequency, qVal); break;
+                case 3: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makeHighPass(sampleRate, frequency, qVal); break;
+                default: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makePeakFilter(sampleRate, frequency, qVal, juce::Decibels::decibelsToGain(gain));
             }
         }
     }
 }
 
+void IIRFilterAudioProcessor::calculateFrequencyResponse()
+{
+    auto numBands = static_cast<int>(*apvts.getRawParameterValue("numbands"));
+    std::vector<double> frequencies = generateLogSpace(20.0, 20000.0, FREQUENCY_POINTS);
+    for (int i = 0; i < numBands; ++i)
+    {
+        for (int j = 0; j < frequencies.size(); ++j)
+        {
+            auto magnitudeResponse = iirs[i].state->getMagnitudeForFrequency(frequencies[j], sampleRate);
+            frequencyResponse[j][i] = juce::Decibels::gainToDecibels(magnitudeResponse, -100.0);
+        }
+    }
+}
+
+std::vector<double> IIRFilterAudioProcessor::generateLogSpace(double start, double end, int points)
+{
+    std::vector<double> result(points);
+    double logStart = std::log10(start);
+    double logEnd = std::log10(end);
+    double step = (logEnd - logStart) / (points - 1);
+    for (int i = 0; i < points; ++i)
+        result[i] = std::pow(10.0, logStart + i * step);
+        
+    return result;
+}
+
+std::vector<std::vector<float>> IIRFilterAudioProcessor::getFrequencyResponse()
+{
+    std::vector<std::vector<float>> result;
+    {
+        const juce::ScopedReadLock lock(frequencyResponseLock);
+        result = frequencyResponse;
+    }
+    return result;
+}
 
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {

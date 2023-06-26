@@ -5,7 +5,7 @@ class LogSlider : public juce::Slider
 {
 public:
     LogSlider() : juce::Slider() {}
-    
+
     juce::String getTextFromValue(double value) override
     {
         if (value >= 1000)

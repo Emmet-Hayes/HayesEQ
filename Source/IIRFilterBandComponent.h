@@ -7,7 +7,7 @@ public:
     IIRFilterBandComponent()
     {
     }
-    
+
     virtual ~IIRFilterBandComponent()
     {
         frequencyAttachment = nullptr;
@@ -15,12 +15,12 @@ public:
         gainAttachment = nullptr;
         typeAttachment = nullptr;
     }
-    
+
     juce::ComboBox typeBox;
     LogSlider frequencySlider;
     LogSlider qSlider;
     juce::Slider gainSlider;
-    
+
     juce::Label typeLabel;
     juce::Label frequencyLabel;
     juce::Label qLabel;

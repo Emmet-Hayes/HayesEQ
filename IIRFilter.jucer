@@ -6,7 +6,7 @@
               id="pRVjbr" jucerFormatVersion="1" pluginFormats="buildAU,buildLV2,buildStandalone,buildVST3">
   <MAINGROUP id="BE1GVm" name="IIRFilter">
     <GROUP id="{CE2A1EFF-709F-E63D-44FF-CA2F032D66D5}" name="Source">
-      <FILE id="rLYcVD" name="FFTAnalyzer.h" compile="0" resource="0" file="Source/FFTAnalyzer.h"/>
+      <FILE id="N3iDqw" name="Utilities.h" compile="0" resource="0" file="Source/Utilities.h"/>
       <FILE id="yLzhSX" name="SpectrumPlotComponent.h" compile="0" resource="0"
             file="Source/SpectrumPlotComponent.h"/>
       <FILE id="fPSiMo" name="CentredLabel.h" compile="0" resource="0" file="Source/CentredLabel.h"/>
@@ -23,11 +23,6 @@
             file="Source/IIRFilterAudioProcessor.cpp"/>
       <FILE id="d0Q1Qr" name="IIRFilterAudioProcessor.h" compile="0" resource="0"
             file="Source/IIRFilterAudioProcessor.h"/>
-    </GROUP>
-    <GROUP id="aRC0wP" name="Assets">
-      <FILE id="N3iDqw" name="DemoUtilities.h" compile="0" resource="0" file="Source/DemoUtilities.h"/>
-      <FILE id="scaNdg" name="DSPDemos_Common.h" compile="0" resource="0"
-            file="Source/DSPDemos_Common.h"/>
     </GROUP>
     <FILE id="eIH07U" name="bgfile.jpg" compile="0" resource="1" file="Images/bgfile.jpg"/>
   </MAINGROUP>

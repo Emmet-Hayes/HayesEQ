@@ -19,6 +19,7 @@ void IIRFilterAudioProcessorEditor::addAllPanelComponents()
 {
     using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    
     numBandsLabel.setText("Number of Bands", juce::dontSendNotification);
     numBandsLabel.setJustificationType(juce::Justification::centred);
     numBandsLabel.setLookAndFeel(&customLookAndFeel);
@@ -58,19 +59,16 @@ void IIRFilterAudioProcessorEditor::createIIRComboBox(int index, const char* gui
     using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
     std::string tstr = treelabel + std::to_string(index);
         
-    if (index <= numBands - 1)
-    {
-        filterBandComponents[index]->typeLabel.setText(guilabel, juce::dontSendNotification);
-        filterBandComponents[index]->typeLabel.setJustificationType(juce::Justification::centred);
-        filterBandComponents[index]->typeLabel.setLookAndFeel(&customLookAndFeel);
-        addAndMakeVisible(filterBandComponents[index]->typeLabel);
-        filterBandComponents[index]->typeBox.addItemList(itemList, defaultItem);
-        filterBandComponents[index]->typeBox.setJustificationType(juce::Justification::centred);
-        filterBandComponents[index]->typeBox.setLookAndFeel(&customLookAndFeel);
-        addAndMakeVisible(filterBandComponents[index]->typeBox);
-        filterBandComponents[index]->typeAttachment = std::make_unique<ComboBoxAttachment>(processor.apvts, 
-            tstr, filterBandComponents[index]->typeBox);
-    }
+    filterBandComponents[index]->typeLabel.setText(guilabel, juce::dontSendNotification);
+    filterBandComponents[index]->typeLabel.setJustificationType(juce::Justification::centred);
+    filterBandComponents[index]->typeLabel.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(filterBandComponents[index]->typeLabel);
+    filterBandComponents[index]->typeBox.addItemList(itemList, defaultItem);
+    filterBandComponents[index]->typeBox.setJustificationType(juce::Justification::centred);
+    filterBandComponents[index]->typeBox.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(filterBandComponents[index]->typeBox);
+    filterBandComponents[index]->typeAttachment = std::make_unique<ComboBoxAttachment>(processor.apvts,
+        tstr, filterBandComponents[index]->typeBox);
 }
 void IIRFilterAudioProcessorEditor::createIIRSliders(int index)
 {
@@ -79,42 +77,40 @@ void IIRFilterAudioProcessorEditor::createIIRSliders(int index)
     std::string fstr = "frequency" + std::to_string(index);
     std::string qstr = "q" + std::to_string(index);
     std::string gstr = "gain" + std::to_string(index);
-    if (index < numBands)
-    {
-        filterBandComponents[index]->frequencyLabel.setText("Frequency", juce::dontSendNotification);
-        filterBandComponents[index]->frequencyLabel.setJustificationType(juce::Justification::centred);
-        filterBandComponents[index]->frequencyLabel.setLookAndFeel(&customLookAndFeel);
-        addAndMakeVisible(filterBandComponents[index]->frequencyLabel);
-        filterBandComponents[index]->frequencySlider.setSliderStyle(juce::Slider::LinearHorizontal);
-        filterBandComponents[index]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
-        filterBandComponents[index]->frequencySlider.setLookAndFeel(&customLookAndFeel);
-        addAndMakeVisible(filterBandComponents[index]->frequencySlider);
-        filterBandComponents[index]->frequencyAttachment = std::make_unique<Attachment>(processor.apvts, 
-            fstr, filterBandComponents[index]->frequencySlider);
+    filterBandComponents[index]->frequencyLabel.setText("Frequency", juce::dontSendNotification);
+    filterBandComponents[index]->frequencyLabel.setJustificationType(juce::Justification::centred);
+    filterBandComponents[index]->frequencyLabel.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(filterBandComponents[index]->frequencyLabel);
+    filterBandComponents[index]->frequencySlider.setSliderStyle(juce::Slider::LinearHorizontal);
+    filterBandComponents[index]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
+    filterBandComponents[index]->frequencySlider.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(filterBandComponents[index]->frequencySlider);
+    filterBandComponents[index]->frequencyAttachment = std::make_unique<Attachment>(processor.apvts,
+        fstr, filterBandComponents[index]->frequencySlider);
 
-        filterBandComponents[index]->qLabel.setText("Q", juce::dontSendNotification);
-        filterBandComponents[index]->qLabel.setJustificationType(juce::Justification::centred);
-        filterBandComponents[index]->qLabel.setLookAndFeel(&customLookAndFeel);
-        addAndMakeVisible(filterBandComponents[index]->qLabel);
-        filterBandComponents[index]->qSlider.setSliderStyle(juce::Slider::LinearHorizontal);
-        filterBandComponents[index]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
-        filterBandComponents[index]->qSlider.setLookAndFeel(&customLookAndFeel);
-        addAndMakeVisible(filterBandComponents[index]->qSlider);
-        filterBandComponents[index]->qAttachment = std::make_unique<Attachment>(processor.apvts, 
-            qstr, filterBandComponents[index]->qSlider);
+    filterBandComponents[index]->qLabel.setText("Q", juce::dontSendNotification);
+    filterBandComponents[index]->qLabel.setJustificationType(juce::Justification::centred);
+    filterBandComponents[index]->qLabel.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(filterBandComponents[index]->qLabel);
+    filterBandComponents[index]->qSlider.setSliderStyle(juce::Slider::LinearHorizontal);
+    filterBandComponents[index]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
+    filterBandComponents[index]->qSlider.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(filterBandComponents[index]->qSlider);
+    filterBandComponents[index]->qAttachment = std::make_unique<Attachment>(processor.apvts,
+        qstr, filterBandComponents[index]->qSlider);
 
-        filterBandComponents[index]->gainLabel.setText("Gain", juce::dontSendNotification);
-        filterBandComponents[index]->gainLabel.setJustificationType(juce::Justification::centred);
-        filterBandComponents[index]->gainLabel.setLookAndFeel(&customLookAndFeel);
-        addAndMakeVisible(filterBandComponents[index]->gainLabel);
-        filterBandComponents[index]->gainSlider.setSliderStyle(juce::Slider::LinearHorizontal);
-        filterBandComponents[index]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
-        filterBandComponents[index]->gainSlider.setNumDecimalPlacesToDisplay(2);
-        filterBandComponents[index]->gainSlider.setLookAndFeel(&customLookAndFeel);
-        addAndMakeVisible(filterBandComponents[index]->gainSlider);
-        filterBandComponents[index]->gainAttachment = std::make_unique<Attachment>(processor.apvts, 
-            gstr, filterBandComponents[index]->gainSlider);
-    }
+    
+    filterBandComponents[index]->gainLabel.setText("Gain", juce::dontSendNotification);
+    filterBandComponents[index]->gainLabel.setJustificationType(juce::Justification::centred);
+    filterBandComponents[index]->gainLabel.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(filterBandComponents[index]->gainLabel);
+    filterBandComponents[index]->gainSlider.setSliderStyle(juce::Slider::LinearHorizontal);
+    filterBandComponents[index]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
+    filterBandComponents[index]->gainSlider.setNumDecimalPlacesToDisplay(2);
+    filterBandComponents[index]->gainSlider.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(filterBandComponents[index]->gainSlider);
+    filterBandComponents[index]->gainAttachment = std::make_unique<Attachment>(processor.apvts, 
+        gstr, filterBandComponents[index]->gainSlider);
 }
 
 void IIRFilterAudioProcessorEditor::resized()
@@ -151,27 +147,37 @@ void IIRFilterAudioProcessorEditor::resized()
         filterBandComponents[i]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70 * windowScaleW, 20 * windowScaleH);
         filterBandComponents[i]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70 * windowScaleW, 20 * windowScaleH);
         filterBandComponents[i]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70 * windowScaleW, 20 * windowScaleH);
+    
+        filterBandComponents[i]->typeLabel.setVisible(true);
+        filterBandComponents[i]->typeBox.setVisible(true);
+        filterBandComponents[i]->frequencyLabel.setVisible(true);
+        filterBandComponents[i]->frequencySlider.setVisible(true);
+        filterBandComponents[i]->qLabel.setVisible(true);
+        filterBandComponents[i]->qSlider.setVisible(true);
+        filterBandComponents[i]->gainLabel.setVisible(true);
+        filterBandComponents[i]->gainSlider.setVisible(true);
+    }
+    
+    for (int i = numBands; i < MAX_BANDS; ++i)
+    {
+        filterBandComponents[i]->typeLabel.setVisible(false);
+        filterBandComponents[i]->typeBox.setVisible(false);
+        filterBandComponents[i]->frequencyLabel.setVisible(false);
+        filterBandComponents[i]->frequencySlider.setVisible(false);
+        filterBandComponents[i]->qLabel.setVisible(false);
+        filterBandComponents[i]->qSlider.setVisible(false);
+        filterBandComponents[i]->gainLabel.setVisible(false);
+        filterBandComponents[i]->gainSlider.setVisible(false);
     }
 }
 
 void IIRFilterAudioProcessorEditor::timerCallback()
 {
-    if (filterBandComponents.size() != numBands)
-    {
-        while (filterBandComponents.size() > numBands)
-            filterBandComponents.pop_back();
-        while (filterBandComponents.size() < numBands)
-        {
-            auto newComponent = std::make_unique<IIRFilterBandComponent>();
-            filterBandComponents.push_back(std::move(newComponent));
-            createIIRComboBox(filterBandComponents.size() - 1, "Type", "type", juce::StringArray{ "Band-pass", "Peak", "Low-pass", "High-pass" });
-            createIIRSliders(filterBandComponents.size() - 1);
-        }
-        resized();
-    }
+    resized();
+    //processor.calculateFrequencyResponse();
     
-    auto fftData = processor.fftAnalyzer.getFftData();
-    spectrumPlotComponent->updatePlot(std::move(fftData));
+    //auto frequencyResponseData = processor.getFrequencyResponse();
+    //spectrumPlotComponent->updatePlot(std::move(frequencyResponseData[0]));
 }
 
 void IIRFilterAudioProcessorEditor::comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged)
