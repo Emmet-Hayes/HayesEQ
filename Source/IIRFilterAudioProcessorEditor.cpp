@@ -174,10 +174,9 @@ void IIRFilterAudioProcessorEditor::resized()
 void IIRFilterAudioProcessorEditor::timerCallback()
 {
     resized();
-    //processor.calculateFrequencyResponse();
-    
-    //auto frequencyResponseData = processor.getFrequencyResponse();
-    //spectrumPlotComponent->updatePlot(std::move(frequencyResponseData[0]));
+    auto frequencyResponseData = processor.getFrequencyResponse();
+    for (int i = 0; i < frequencyResponseData.size(); ++i)
+        spectrumPlotComponent->updatePlot(frequencyResponseData[i]);
 }
 
 void IIRFilterAudioProcessorEditor::comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged)

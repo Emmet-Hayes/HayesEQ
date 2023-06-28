@@ -1,43 +1,43 @@
 #pragma once
+#include <JuceHeader.h>
 
 class SpectrumPlotComponent : public juce::Component
 {
 public:
-    SpectrumPlotComponent() {}
+    SpectrumPlotComponent()
+    {
+        frequencyResponsePath.clear();
+    }
+
+    void updatePlot(const std::vector<float>& frequencyResponseData)
+    {
+        frequencyResponsePath.clear();
+
+        auto area = getLocalBounds();
+        auto width = area.getWidth();
+        auto height = area.getHeight();
+        for (int i = 0; i < frequencyResponseData.size(); ++i)
+        {
+            float x = juce::jmap(static_cast<float>(i), 0.0f, static_cast<float>(frequencyResponseData.size()), 0.0f, static_cast<float>(width));
+            float y = juce::jmap(frequencyResponseData[i], -100.0f, 0.0f, static_cast<float>(height), 0.0f);
+
+            if (i == 0)
+                frequencyResponsePath.startNewSubPath(x, y);
+            else
+                frequencyResponsePath.lineTo(x, y);
+        }
+
+        repaint();
+    }
 
     void paint(juce::Graphics& g) override
     {
-        /*
-        g.fillAll (juce::Colours::black);
         g.setColour(juce::Colours::white);
-
-        if (frequencyResponseData.empty())
-            return;
-
-        auto area = getLocalBounds();
-        auto w = area.getWidth();
-        auto h = area.getHeight();
-        auto binWidth = w / float(frequencyResponseData.size());
-
-        for (size_t i = 0; i < frequencyResponseData.size() - 1; ++i)
-        {
-            auto x1 = binWidth * i;
-            auto y1 = juce::jmap(frequencyResponseData[i], 0.0f, 1.0f, float(h), 0.0f);
-
-            auto x2 = binWidth * (i + 1);
-            auto y2 = juce::jmap(frequencyResponseData[i + 1], 0.0f, 1.0f, float(h), 0.0f);
-
-            g.drawLine(x1, y1, x2, y2, 2.0f);
-        }
-        */
-    }
-
-    void updatePlot(std::vector<float>&& frDataToUse)
-    {
-        /*frequencyResponseData = std::move(frDataToUse);
-        repaint();*/
+        g.strokePath(frequencyResponsePath, juce::PathStrokeType(2.0f));
     }
 
 private:
-    //std::vector<float> frequencyResponseData;
+    juce::Path frequencyResponsePath;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SpectrumPlotComponent)
 };

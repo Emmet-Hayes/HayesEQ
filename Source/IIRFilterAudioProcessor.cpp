@@ -22,7 +22,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout IIRFilterAudioProcessor::cre
         layout.add(std::make_unique<juce::AudioParameterFloat>(ParameterID { qstr, 1 }, "Q", makeLogarithmicRange(0.1f, 20.0f), 1.0f));
         layout.add(std::make_unique<juce::AudioParameterFloat>(ParameterID { gstr, 1 }, "Gain", -24.0f, 24.0f, 0.0f));
     }
-    layout.add(std::make_unique<juce::AudioParameterInt>(ParameterID { "numbands", 1 }, "NumBands", 1, 10, 1));
+    layout.add(std::make_unique<juce::AudioParameterInt>(ParameterID { "numbands", 1 }, "NumBands", 1, 8, 8));
     return layout;
 }
 
@@ -96,6 +96,7 @@ void IIRFilterAudioProcessor::updateParameters()
                 default: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makePeakFilter(sampleRate, frequency, qVal, juce::Decibels::decibelsToGain(gain));
             }
         }
+        calculateFrequencyResponse();
     }
 }
 
@@ -103,22 +104,28 @@ void IIRFilterAudioProcessor::calculateFrequencyResponse()
 {
     auto numBands = static_cast<int>(*apvts.getRawParameterValue("numbands"));
     std::vector<double> frequencies = generateLogSpace(20.0, 20000.0, FREQUENCY_POINTS);
+
+    // Initialize or resize the frequencyResponse
+    frequencyResponse.resize(frequencies.size(), std::vector<float>(numBands, 0.0f));
+
     for (int i = 0; i < numBands; ++i)
     {
         for (int j = 0; j < frequencies.size(); ++j)
         {
+            const juce::ScopedWriteLock lock(frequencyResponseLock);
             auto magnitudeResponse = iirs[i].state->getMagnitudeForFrequency(frequencies[j], sampleRate);
             frequencyResponse[j][i] = juce::Decibels::gainToDecibels(magnitudeResponse, -100.0);
         }
     }
 }
 
+
 std::vector<double> IIRFilterAudioProcessor::generateLogSpace(double start, double end, int points)
 {
     std::vector<double> result(points);
     double logStart = std::log10(start);
     double logEnd = std::log10(end);
-    double step = (logEnd - logStart) / (points - 1);
+    double step = (logEnd - logStart) / (static_cast<double>(points) - 1);
     for (int i = 0; i < points; ++i)
         result[i] = std::pow(10.0, logStart + i * step);
         
