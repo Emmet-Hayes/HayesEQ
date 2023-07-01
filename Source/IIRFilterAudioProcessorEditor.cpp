@@ -36,6 +36,9 @@ void IIRFilterAudioProcessorEditor::addAllPanelComponents()
         filterBandComponents.push_back(std::make_unique<IIRFilterBandComponent>());
         createIIRComboBox(i, "Type", "type", juce::StringArray { "Band-pass", "Peak", "Low-pass", "High-pass" });
         createIIRSliders(i);
+
+        filterBandComponents[i]->typeBox.addListener(this);
+        filterBandComponents[i]->gainSlider.setEnabled(isPeakFilterSelected(i));
     }
   
     spectrumPlotComponent = std::make_unique<SpectrumPlotComponent>();
@@ -113,6 +116,11 @@ void IIRFilterAudioProcessorEditor::createIIRSliders(int index)
         gstr, filterBandComponents[index]->gainSlider);
 }
 
+bool IIRFilterAudioProcessorEditor::isPeakFilterSelected(int index) const
+{
+    return filterBandComponents[index]->typeBox.getSelectedId() == 2;
+}
+
 void IIRFilterAudioProcessorEditor::resized()
 {
     resizer->setBounds(getWidth() - 20, getHeight() - 20, 20, 20);
@@ -182,7 +190,18 @@ void IIRFilterAudioProcessorEditor::timerCallback()
 void IIRFilterAudioProcessorEditor::comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged)
 {
     if (comboBoxThatHasChanged == &numBandsBox)
+    {
         numBands = std::stoi(numBandsBox.getText().toStdString());
+        return;
+    }
+
+    for (int i = 0; i < filterBandComponents.size(); ++i)
+    {
+        if (comboBoxThatHasChanged == &(filterBandComponents[i]->typeBox))
+        {
+            filterBandComponents[i]->gainSlider.setEnabled(isPeakFilterSelected(i));
+        }
+    }
 }
 
 void IIRFilterAudioProcessorEditor::paint(juce::Graphics& g)
