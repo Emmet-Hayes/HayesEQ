@@ -4,16 +4,6 @@
 class CustomLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-    void drawLinearSlider(juce::Graphics& g, int x, int y, int width, int height,
-                          float sliderPos, float /*minSliderPos*/, float /*maxSliderPos*/,
-                          const juce::Slider::SliderStyle /*style*/, juce::Slider& /*slider*/) override
-    {
-        g.setColour(juce::Colours::darkgrey);
-        g.fillRect(x, y + height / 2 - 2, width, 4);
-
-        g.setColour(juce::Colours::pink);
-        g.fillRect(static_cast<int>(sliderPos) - 5, y, 10, height);
-    }
 
     void drawComboBox(juce::Graphics& g, int width, int height, bool /*isButtonDown*/,
                       int buttonX, int buttonY, int buttonW, int buttonH,

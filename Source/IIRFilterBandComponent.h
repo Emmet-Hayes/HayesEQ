@@ -1,5 +1,7 @@
 #pragma once
-#include "LogSlider.h"
+#include "LogFreqSlider.h"
+#include "LogQSlider.h"
+#include "DbSlider.h"
 
 class IIRFilterBandComponent
 {
@@ -17,9 +19,9 @@ public:
     }
 
     juce::ComboBox typeBox;
-    LogSlider frequencySlider;
-    LogSlider qSlider;
-    juce::Slider gainSlider;
+    LogFreqSlider frequencySlider;
+    LogQSlider qSlider;
+    DbSlider gainSlider;
 
     juce::Label typeLabel;
     juce::Label frequencyLabel;
