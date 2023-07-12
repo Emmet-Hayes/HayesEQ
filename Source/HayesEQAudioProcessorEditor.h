@@ -6,8 +6,8 @@
 class IIRFilterBandComponent;
 
 class HayesEQAudioProcessorEditor : public juce::AudioProcessorEditor
-                                    , public juce::ComboBox::Listener
-                                    , private juce::Timer
+                                  , public juce::ComboBox::Listener
+                                  , private juce::Timer
 {
 public:
     HayesEQAudioProcessorEditor(HayesEQAudioProcessor& p);
@@ -29,7 +29,7 @@ private:
     juce::Image image;
     
     std::vector<std::unique_ptr<IIRFilterBandComponent>> filterBandComponents;
-    //std::unique_ptr<SpectrumPlotComponent> spectrumPlotComponent;
+    std::unique_ptr<SpectrumPlotComponent> spectrumPlotComponent;
     
     juce::ComboBox numBandsBox;
     juce::Label numBandsLabel;

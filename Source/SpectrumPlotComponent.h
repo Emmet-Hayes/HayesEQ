@@ -32,8 +32,10 @@ public:
 
     void paint(juce::Graphics& g) override
     {
+        /*
         g.setColour(juce::Colours::white);
         g.strokePath(frequencyResponsePath, juce::PathStrokeType(2.0f));
+        */
     }
 
 private:

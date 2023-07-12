@@ -41,8 +41,8 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
         filterBandComponents[i]->gainSlider.setEnabled(isPeakFilterSelected(i));
     }
   
-    //spectrumPlotComponent = std::make_unique<SpectrumPlotComponent>();
-    //addAndMakeVisible(spectrumPlotComponent.get());
+    spectrumPlotComponent = std::make_unique<SpectrumPlotComponent>();
+    addAndMakeVisible(spectrumPlotComponent.get());
     
     image = juce::ImageCache::getFromMemory(BinaryData::bgfile_jpg, BinaryData::bgfile_jpgSize);
     
@@ -137,8 +137,8 @@ void HayesEQAudioProcessorEditor::resized()
     int topButtonOffset = (totalWidth - topButtonWidth) / 2;
 
     numBandsLabel.setBounds(bounds.removeFromTop(20 * windowScaleH));
-    numBandsBox.setBounds(bounds.removeFromTop(30 * windowScaleH).reduced(topButtonOffset, 0));
-    //spectrumPlotComponent->setBounds(bounds.removeFromTop(100 * windowScaleH));
+    numBandsBox.setBounds(bounds.removeFromTop(50 * windowScaleH).reduced(topButtonOffset, 0));
+    spectrumPlotComponent->setBounds(bounds.removeFromTop(100 * windowScaleH));
 
     for (int i = 0; i < numBands; ++i)
     {
@@ -181,7 +181,7 @@ void HayesEQAudioProcessorEditor::resized()
 
 void HayesEQAudioProcessorEditor::timerCallback()
 {
-    //resized();
+    resized();
     //auto frequencyResponseData = processor.getFrequencyResponse();
     // for (int i = 0; i < frequencyResponseData.size(); ++i)
     //    spectrumPlotComponent->updatePlot(frequencyResponseData[i]);

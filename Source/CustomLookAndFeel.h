@@ -4,33 +4,7 @@
 class CustomLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-
-    void drawComboBox(juce::Graphics& g, int width, int height, bool /*isButtonDown*/,
-                      int buttonX, int buttonY, int buttonW, int buttonH,
-                      juce::ComboBox& box) override
-    {
-        auto cornerSize = box.findParentComponentOfClass<juce::ChoicePropertyComponent>() != nullptr ? 0.0f : 5.0f;
-        juce::Rectangle<int> boxBounds(0, 0, width, height);
-
-        g.setColour(juce::Colours::darkmagenta);
-        g.fillRoundedRectangle(boxBounds.toFloat(), cornerSize);
-        g.setColour(juce::Colours::silver);
-        g.drawRoundedRectangle(boxBounds.toFloat().reduced(0.5f, 0.5f), cornerSize, 1.0f);
-
-        juce::Path path;
-        path.startNewSubPath(buttonX + buttonW * 0.5f, buttonY + buttonH * 0.3f);
-        path.lineTo(buttonX + buttonW * 0.1f, buttonY + buttonH * 0.7f);
-        path.lineTo(buttonX + buttonW * 0.9f, buttonY + buttonH * 0.7f);
-        path.closeSubPath();
-
-        g.setColour(box.findColour(juce::ComboBox::arrowColourId).withAlpha ((box.isEnabled() ? 0.9f : 0.2f)));
-        g.fillPath(path);
-    }
-
-    void drawPopupMenuBackground(juce::Graphics& g, int width, int height) override
-    {
-        g.fillAll(juce::Colours::darkmagenta);
-    }
+    CustomLookAndFeel();
 
     void drawPopupMenuItem(juce::Graphics& g, const juce::Rectangle<int>& area,
                            bool isSeparator, bool isActive, bool isHighlighted,
@@ -87,7 +61,7 @@ public:
             .withAlpha((slider.isMouseOverOrDragging() && slider.getSliderStyle() != juce::Slider::SliderStyle::LinearBar
                         && slider.getSliderStyle() != juce::Slider::SliderStyle::LinearBarVertical) ? 0.7f : 0.3f));
         l->setColour(juce::TextEditor::outlineColourId, slider.findColour(juce::Slider::textBoxOutlineColourId));
-        l->setFont(juce::Font(16.0f * windowScale));
+        l->setFont(juce::Font("Lucida Console", 7.f * windowScale, juce::Font::bold));
         l->setJustificationType(juce::Justification::centred);
         
         return l;
@@ -95,11 +69,20 @@ public:
 
     juce::Font getLabelFont(juce::Label& label) override
     {
-        return juce::Font(16.0f * windowScale);
+        return juce::Font(juce::Font("Lucida Console", 7.f * windowScale, juce::Font::bold));
     }
 
+    void drawComboBox(juce::Graphics&, int, int, bool, int, int, int, int, juce::ComboBox&) override;
+    juce::Font getComboBoxFont(juce::ComboBox&) override;
+	juce::Font getPopupMenuFont() override;
+	void drawPopupMenuBackground(juce::Graphics&, int, int) override;
+    void drawRotarySlider(juce::Graphics&, int, int, int, int, float, const float,
+		const float, juce::Slider&) override;
     void setWindowScale(const float& newScale) { windowScale = newScale; }
 
 private:
+	juce::Font getCommonMenuFont(float);
+	
     float windowScale = 1.0f;
+    float rotaryOutlineBrightness = 1.0f;
 };

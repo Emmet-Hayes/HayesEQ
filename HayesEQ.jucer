@@ -6,6 +6,10 @@
               id="pRVjbr" jucerFormatVersion="1" pluginFormats="buildAU,buildLV2,buildStandalone,buildVST3">
   <MAINGROUP id="BE1GVm" name="HayesEQ">
     <GROUP id="{CE2A1EFF-709F-E63D-44FF-CA2F032D66D5}" name="Source">
+      <FILE id="tVxFY5" name="CustomLookAndFeel.h" compile="0" resource="0"
+            file="Source/CustomLookAndFeel.h"/>
+      <FILE id="SOmKes" name="CustomLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/CustomLookAndFeel.cpp"/>
       <FILE id="WMMgcy" name="DbSlider.h" compile="0" resource="0" file="Source/DbSlider.h"/>
       <FILE id="sFV2Ok" name="LogFreqSlider.h" compile="0" resource="0" file="Source/LogFreqSlider.h"/>
       <FILE id="XUqQ6x" name="LogQSlider.h" compile="0" resource="0" file="Source/LogQSlider.h"/>
@@ -15,8 +19,6 @@
       <FILE id="fPSiMo" name="CentredLabel.h" compile="0" resource="0" file="Source/CentredLabel.h"/>
       <FILE id="cCUZyb" name="IIRFilterBandComponent.h" compile="0" resource="0"
             file="Source/IIRFilterBandComponent.h"/>
-      <FILE id="tVxFY5" name="CustomLookAndFeel.h" compile="0" resource="0"
-            file="Source/CustomLookAndFeel.h"/>
       <FILE id="vT4KGJ" name="HayesEQAudioProcessorEditor.cpp" compile="1"
             resource="0" file="Source/HayesEQAudioProcessorEditor.cpp"/>
       <FILE id="SnLJHA" name="HayesEQAudioProcessorEditor.h" compile="0"
