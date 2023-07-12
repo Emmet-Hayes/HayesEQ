@@ -29,7 +29,7 @@ private:
     juce::Image image;
     
     std::vector<std::unique_ptr<IIRFilterBandComponent>> filterBandComponents;
-    std::unique_ptr<SpectrumPlotComponent> spectrumPlotComponent;
+    //std::unique_ptr<SpectrumPlotComponent> spectrumPlotComponent;
     
     juce::ComboBox numBandsBox;
     juce::Label numBandsLabel;
