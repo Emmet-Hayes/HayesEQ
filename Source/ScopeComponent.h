@@ -62,8 +62,6 @@ public:
 
 		g.setColour(juce::Colours::white);
 
-		//auto scopeRect = juce::Rectangle<SampleType>{ SampleType(0), SampleType(0), w, h / 2 };
-		//plot(buffer.data(), buffer.size(), g, scopeRect, SampleType(1), h / 4);
 		auto spectrumRect = juce::Rectangle<SampleType>{ SampleType(0), SampleType(0), w, h };
 
 		// draw grid
@@ -74,18 +72,26 @@ public:
 		for (int i = 1; i < numVerticalLines; ++i)
 		{
 			float x = jmap<float>(i, 0, numVerticalLines, spectrumRect.getX(), spectrumRect.getRight());
-			g.drawLine(x, spectrumRect.getY(), x, spectrumRect.getBottom());
+			g.drawLine(x, spectrumRect.getY() + 10, x, spectrumRect.getBottom() - 15);
+			g.drawText(xLabels[i - 1], x - 5, spectrumRect.getBottom() - 25, 25, 25, juce::Justification::left);
 		}
 
 		for (int i = 1; i < numHorizontalLines; ++i)
 		{
 			float y = jmap<float>(i, 0, numHorizontalLines, spectrumRect.getY(), spectrumRect.getBottom());
-			g.drawLine(spectrumRect.getX(), y, spectrumRect.getRight(), y);
+			g.drawLine(spectrumRect.getX() + 20, y, spectrumRect.getRight() - 20, y);
+			g.drawText(ampLabels[i - 1], spectrumRect.getX(), y - 10, 20, 20, juce::Justification::left);
 		}
 
 		g.setColour(juce::Colours::white);
 
-		plot(spectrumData.data(), spectrumData.size() / 4, g, spectrumRect);
+		// probe for changes in amplitude
+		for (int i = 0; i < 8; ++i)
+		{
+			if (spectrumData.data()[i * (spectrumData.size() / 8)] > 0.1f || 
+				spectrumData.data()[i * (spectrumData.size() / 8)] < -10.1f)
+				plot(spectrumData.data(), spectrumData.size() / 4, g, spectrumRect);
+		}
 	}
 
 	void resized() override {}
@@ -97,6 +103,8 @@ private:
 	juce::dsp::WindowingFunction<SampleType> windowFun{ (size_t)fft.getSize(),
 		                             juce::dsp::WindowingFunction<SampleType>::hann };
 	std::array<SampleType, 2 * AudioBufferQueue<SampleType>::bufferSize> spectrumData;
+	const char* xLabels[9] { "64", "128", "256", "512", "1k", "2k", "4k", "8k", "16k"};
+	const char* ampLabels[7] { "18", "12", "6", "0", "-6", "-12", "-18" };
 
 	void timerCallback() override 
 	{
@@ -110,16 +118,6 @@ private:
 		for (auto& s : spectrumData)
 			s = jmap(jlimit(mindB, maxdB, juce::Decibels::gainToDecibels(s) - juce::Decibels::gainToDecibels(SampleType((size_t)fft.getSize()))), mindB, maxdB, SampleType(0), SampleType(1));
 		repaint();
-	}
-
-	static SampleType freqToMel(SampleType freq)
-	{
-		return 2595 * log10(1 + freq / 700);
-	}
-
-	static SampleType melToFreq(SampleType mel)
-	{
-		return 700 * (pow(10, mel / 2595) - 1);
 	}
 
 	static void plot(const SampleType* data, size_t numSamples, Graphics& g, juce::Rectangle<SampleType> rect,

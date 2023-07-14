@@ -17,7 +17,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout HayesEQAudioProcessor::creat
         std::string fstr = "frequency" + std::to_string(i);
         std::string qstr = "q" + std::to_string(i);
         std::string gstr = "gain" + std::to_string(i);
-        layout.add(std::make_unique<juce::AudioParameterChoice>(ParameterID { tstr, 1 }, "Type", juce::StringArray { "Band-pass", "Peak", "Low-pass", "High-pass" }, 1));
+        layout.add(std::make_unique<juce::AudioParameterChoice>(ParameterID { tstr, 1 }, "Type", juce::StringArray { "Band-pass", "Peak", "Low-pass", "High-pass", "Notch"}, 1));
         layout.add(std::make_unique<juce::AudioParameterFloat>(ParameterID { fstr, 1 }, "Frequency", makeLogarithmicRange(20.0f, 20000.0f), initialFrequencies[i]));
         layout.add(std::make_unique<juce::AudioParameterFloat>(ParameterID { qstr, 1 }, "Q", makeLogarithmicRange(0.1f, 20.0f), 1.0f));
         layout.add(std::make_unique<juce::AudioParameterFloat>(ParameterID { gstr, 1 }, "Gain", -24.0f, 24.0f, 0.0f));

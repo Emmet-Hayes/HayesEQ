@@ -34,7 +34,7 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
     for (int i = 0; i < MAX_BANDS; ++i)
     {
         filterBandComponents.push_back(std::make_unique<IIRFilterBandComponent>());
-        createIIRComboBox(i, "Type", "type", juce::StringArray { "Band-pass", "Peak", "Low-pass", "High-pass" });
+        createIIRComboBox(i, "Type", "type", juce::StringArray { "Band-pass", "Peak", "Low-pass", "High-pass", "Notch" });
         createIIRSliders(i);
 
         filterBandComponents[i]->typeBox.addListener(this);
