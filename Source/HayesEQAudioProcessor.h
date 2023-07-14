@@ -1,5 +1,6 @@
 #pragma once
 #include <JuceHeader.h>
+#include "ScopeComponent.h"
 
 constexpr int MAX_BANDS = 8;
 constexpr int FREQUENCY_POINTS = 128;
@@ -28,16 +29,14 @@ public:
     
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void updateParameters();
-    void calculateFrequencyResponse();
-    std::vector<double> generateLogSpace(double start, double end, int points);
-    std::vector<std::vector<float>> getFrequencyResponse();
     
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> iirs[MAX_BANDS];
-    std::vector<std::vector<float>> frequencyResponse;
-    juce::ReadWriteLock frequencyResponseLock;
     
     juce::AudioProcessorValueTreeState apvts;
     double sampleRate = 44100.0;
+
+    AudioBufferQueue<float> audioBufferQueue;
+    ScopeDataCollector<float> scopeDataCollector { audioBufferQueue };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HayesEQAudioProcessor)
 };

@@ -6,6 +6,8 @@
               id="pRVjbr" jucerFormatVersion="1" pluginFormats="buildAU,buildLV2,buildStandalone,buildVST3">
   <MAINGROUP id="BE1GVm" name="HayesEQ">
     <GROUP id="{CE2A1EFF-709F-E63D-44FF-CA2F032D66D5}" name="Source">
+      <FILE id="ovwQO7" name="ScopeComponent.h" compile="0" resource="0"
+            file="Source/ScopeComponent.h"/>
       <FILE id="tVxFY5" name="CustomLookAndFeel.h" compile="0" resource="0"
             file="Source/CustomLookAndFeel.h"/>
       <FILE id="SOmKes" name="CustomLookAndFeel.cpp" compile="1" resource="0"
@@ -14,8 +16,6 @@
       <FILE id="sFV2Ok" name="LogFreqSlider.h" compile="0" resource="0" file="Source/LogFreqSlider.h"/>
       <FILE id="XUqQ6x" name="LogQSlider.h" compile="0" resource="0" file="Source/LogQSlider.h"/>
       <FILE id="N3iDqw" name="Utilities.h" compile="0" resource="0" file="Source/Utilities.h"/>
-      <FILE id="yLzhSX" name="SpectrumPlotComponent.h" compile="0" resource="0"
-            file="Source/SpectrumPlotComponent.h"/>
       <FILE id="fPSiMo" name="CentredLabel.h" compile="0" resource="0" file="Source/CentredLabel.h"/>
       <FILE id="cCUZyb" name="IIRFilterBandComponent.h" compile="0" resource="0"
             file="Source/IIRFilterBandComponent.h"/>

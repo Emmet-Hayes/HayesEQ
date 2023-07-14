@@ -41,7 +41,7 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
         filterBandComponents[i]->gainSlider.setEnabled(isPeakFilterSelected(i));
     }
   
-    spectrumPlotComponent = std::make_unique<SpectrumPlotComponent>();
+    spectrumPlotComponent = std::make_unique<ScopeComponent<float>>(processor.audioBufferQueue);
     addAndMakeVisible(spectrumPlotComponent.get());
     
     image = juce::ImageCache::getFromMemory(BinaryData::bgfile_jpg, BinaryData::bgfile_jpgSize);
@@ -76,7 +76,6 @@ void HayesEQAudioProcessorEditor::createIIRComboBox(int index, const char* guila
 void HayesEQAudioProcessorEditor::createIIRSliders(int index)
 {
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-
     std::string fstr = "frequency" + std::to_string(index);
     std::string qstr = "q" + std::to_string(index);
     std::string gstr = "gain" + std::to_string(index);
@@ -182,9 +181,6 @@ void HayesEQAudioProcessorEditor::resized()
 void HayesEQAudioProcessorEditor::timerCallback()
 {
     resized();
-    //auto frequencyResponseData = processor.getFrequencyResponse();
-    // for (int i = 0; i < frequencyResponseData.size(); ++i)
-    //    spectrumPlotComponent->updatePlot(frequencyResponseData[i]);
 }
 
 void HayesEQAudioProcessorEditor::comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged)
@@ -196,12 +192,8 @@ void HayesEQAudioProcessorEditor::comboBoxChanged(juce::ComboBox* comboBoxThatHa
     }
 
     for (int i = 0; i < filterBandComponents.size(); ++i)
-    {
         if (comboBoxThatHasChanged == &(filterBandComponents[i]->typeBox))
-        {
             filterBandComponents[i]->gainSlider.setEnabled(isPeakFilterSelected(i));
-        }
-    }
 }
 
 void HayesEQAudioProcessorEditor::paint(juce::Graphics& g)

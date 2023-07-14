@@ -46,6 +46,8 @@ void HayesEQAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
     auto numBands = static_cast<int>(*apvts.getRawParameterValue("numbands"));
     for (int i = 0; i < numBands; ++i)
         iirs[i].process(context);
+
+    scopeDataCollector.process(context.getOutputBlock().getChannelPointer(0), context.getOutputBlock().getNumSamples()); 
 }
 
 
@@ -96,50 +98,7 @@ void HayesEQAudioProcessor::updateParameters()
                 default: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makePeakFilter(sampleRate, frequency, qVal, juce::Decibels::decibelsToGain(gain));
             }
         }
-        calculateFrequencyResponse();
     }
-}
-
-void HayesEQAudioProcessor::calculateFrequencyResponse()
-{
-    auto numBands = static_cast<int>(*apvts.getRawParameterValue("numbands"));
-    std::vector<double> frequencies = generateLogSpace(20.0, 20000.0, FREQUENCY_POINTS);
-
-    // Initialize or resize the frequencyResponse
-    frequencyResponse.resize(frequencies.size(), std::vector<float>(numBands, 0.0f));
-
-    for (int i = 0; i < numBands; ++i)
-    {
-        for (int j = 0; j < frequencies.size(); ++j)
-        {
-            const juce::ScopedWriteLock lock(frequencyResponseLock);
-            auto magnitudeResponse = iirs[i].state->getMagnitudeForFrequency(frequencies[j], sampleRate);
-            frequencyResponse[j][i] = juce::Decibels::gainToDecibels(magnitudeResponse, -100.0);
-        }
-    }
-}
-
-
-std::vector<double> HayesEQAudioProcessor::generateLogSpace(double start, double end, int points)
-{
-    std::vector<double> result(points);
-    double logStart = std::log10(start);
-    double logEnd = std::log10(end);
-    double step = (logEnd - logStart) / (static_cast<double>(points) - 1);
-    for (int i = 0; i < points; ++i)
-        result[i] = std::pow(10.0, logStart + i * step);
-        
-    return result;
-}
-
-std::vector<std::vector<float>> HayesEQAudioProcessor::getFrequencyResponse()
-{
-    std::vector<std::vector<float>> result;
-    {
-        const juce::ScopedReadLock lock(frequencyResponseLock);
-        result = frequencyResponse;
-    }
-    return result;
 }
 
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()

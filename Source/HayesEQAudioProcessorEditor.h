@@ -1,7 +1,6 @@
 #pragma once
 #include "HayesEQAudioProcessor.h"
 #include "CustomLookAndFeel.h"
-#include "SpectrumPlotComponent.h"
 
 class IIRFilterBandComponent;
 
@@ -29,7 +28,7 @@ private:
     juce::Image image;
     
     std::vector<std::unique_ptr<IIRFilterBandComponent>> filterBandComponents;
-    std::unique_ptr<SpectrumPlotComponent> spectrumPlotComponent;
+    std::unique_ptr<ScopeComponent<float>> spectrumPlotComponent;
     
     juce::ComboBox numBandsBox;
     juce::Label numBandsLabel;
