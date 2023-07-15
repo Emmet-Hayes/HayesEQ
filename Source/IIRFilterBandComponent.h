@@ -23,11 +23,6 @@ public:
     LogQSlider qSlider;
     DbSlider gainSlider;
 
-    juce::Label typeLabel;
-    juce::Label frequencyLabel;
-    juce::Label qLabel;
-    juce::Label gainLabel;
-
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> frequencyAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> qAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> gainAttachment;

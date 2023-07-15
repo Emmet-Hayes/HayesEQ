@@ -55,7 +55,7 @@ juce::Font CustomLookAndFeel::getPopupMenuFont()
 
 juce::Font CustomLookAndFeel::getCommonMenuFont(float s) 
 {
-    return juce::Font("Lucida Console", 6.f * s, juce::Font::plain);
+    return juce::Font("Lucida Console", 11.f * s, juce::Font::bold);
 }
 
 void CustomLookAndFeel::drawPopupMenuBackground(juce::Graphics& g, int width, int height) 

@@ -31,6 +31,27 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
     addAndMakeVisible(numBandsBox);
     numBandsAttachment = std::make_unique<ComboBoxAttachment>(processor.apvts, "numbands", numBandsBox);
     
+    typeLabel.setText("Filter Type", juce::dontSendNotification);
+    typeLabel.setJustificationType(juce::Justification::centred);
+    typeLabel.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(typeLabel);
+
+    frequencyLabel.setText("Frequency", juce::dontSendNotification);
+    frequencyLabel.setJustificationType(juce::Justification::centred);
+    frequencyLabel.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(frequencyLabel);
+
+    qLabel.setText("Q", juce::dontSendNotification);
+    qLabel.setJustificationType(juce::Justification::centred);
+    qLabel.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(qLabel);
+
+    gainLabel.setText("Gain", juce::dontSendNotification);
+    gainLabel.setJustificationType(juce::Justification::centred);
+    gainLabel.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(gainLabel);
+
+
     for (int i = 0; i < MAX_BANDS; ++i)
     {
         filterBandComponents.push_back(std::make_unique<IIRFilterBandComponent>());
@@ -62,10 +83,6 @@ void HayesEQAudioProcessorEditor::createIIRComboBox(int index, const char* guila
     using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
     std::string tstr = treelabel + std::to_string(index);
         
-    filterBandComponents[index]->typeLabel.setText(guilabel, juce::dontSendNotification);
-    filterBandComponents[index]->typeLabel.setJustificationType(juce::Justification::centred);
-    filterBandComponents[index]->typeLabel.setLookAndFeel(&customLookAndFeel);
-    addAndMakeVisible(filterBandComponents[index]->typeLabel);
     filterBandComponents[index]->typeBox.addItemList(itemList, defaultItem);
     filterBandComponents[index]->typeBox.setJustificationType(juce::Justification::centred);
     filterBandComponents[index]->typeBox.setLookAndFeel(&customLookAndFeel);
@@ -79,10 +96,6 @@ void HayesEQAudioProcessorEditor::createIIRSliders(int index)
     std::string fstr = "frequency" + std::to_string(index);
     std::string qstr = "q" + std::to_string(index);
     std::string gstr = "gain" + std::to_string(index);
-    filterBandComponents[index]->frequencyLabel.setText("Frequency", juce::dontSendNotification);
-    filterBandComponents[index]->frequencyLabel.setJustificationType(juce::Justification::centred);
-    filterBandComponents[index]->frequencyLabel.setLookAndFeel(&customLookAndFeel);
-    addAndMakeVisible(filterBandComponents[index]->frequencyLabel);
     filterBandComponents[index]->frequencySlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     filterBandComponents[index]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
     filterBandComponents[index]->frequencySlider.setLookAndFeel(&customLookAndFeel);
@@ -90,10 +103,6 @@ void HayesEQAudioProcessorEditor::createIIRSliders(int index)
     filterBandComponents[index]->frequencyAttachment = std::make_unique<Attachment>(processor.apvts,
         fstr, filterBandComponents[index]->frequencySlider);
 
-    filterBandComponents[index]->qLabel.setText("Q", juce::dontSendNotification);
-    filterBandComponents[index]->qLabel.setJustificationType(juce::Justification::centred);
-    filterBandComponents[index]->qLabel.setLookAndFeel(&customLookAndFeel);
-    addAndMakeVisible(filterBandComponents[index]->qLabel);
     filterBandComponents[index]->qSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     filterBandComponents[index]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
     filterBandComponents[index]->qSlider.setLookAndFeel(&customLookAndFeel);
@@ -101,11 +110,6 @@ void HayesEQAudioProcessorEditor::createIIRSliders(int index)
     filterBandComponents[index]->qAttachment = std::make_unique<Attachment>(processor.apvts,
         qstr, filterBandComponents[index]->qSlider);
 
-    
-    filterBandComponents[index]->gainLabel.setText("Gain", juce::dontSendNotification);
-    filterBandComponents[index]->gainLabel.setJustificationType(juce::Justification::centred);
-    filterBandComponents[index]->gainLabel.setLookAndFeel(&customLookAndFeel);
-    addAndMakeVisible(filterBandComponents[index]->gainLabel);
     filterBandComponents[index]->gainSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     filterBandComponents[index]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
     filterBandComponents[index]->gainSlider.setNumDecimalPlacesToDisplay(2);
@@ -133,47 +137,45 @@ void HayesEQAudioProcessorEditor::resized()
     int reducedWidth = bandWidth * 0.9;
     int topButtonWidth = totalWidth * 0.2;
     int offset = (bandWidth - reducedWidth) / 2;
-    int topButtonOffset = (totalWidth - topButtonWidth) / 2;
 
-    numBandsLabel.setBounds(bounds.removeFromTop(20 * windowScaleH));
-    numBandsBox.setBounds(bounds.removeFromTop(50 * windowScaleH).reduced(topButtonOffset, 0));
-    spectrumPlotComponent->setBounds(bounds.removeFromTop(100 * windowScaleH));
+    numBandsLabel.setBounds(30 * windowScaleW, 5 * windowScaleH, 140 * windowScaleW, 25 * windowScaleH);
+    numBandsBox.setBounds(170 * windowScaleW, 5 * windowScaleH, 50 * windowScaleW, 25 * windowScaleH);
+    spectrumPlotComponent->setBounds(0, 20 * windowScaleH, 500 * windowScaleW, 200 * windowScaleH);
+
+    typeLabel.setBounds(150, 207 * windowScaleH, 200 * windowScaleW, 25 * windowScaleH);
+    frequencyLabel.setBounds(150, 257 * windowScaleH, 200 * windowScaleW, 25 * windowScaleH);
+    qLabel.setBounds(150, 342 * windowScaleH, 200 * windowScaleW, 25 * windowScaleH);
+    gainLabel.setBounds(150, 417 * windowScaleH, 200 * windowScaleW, 25 * windowScaleH);
 
     for (int i = 0; i < numBands; ++i)
     {
-        auto bandBounds = bounds.removeFromLeft(bandWidth).reduced(offset, 0);
-        filterBandComponents[i]->typeLabel.setBounds(bandBounds.removeFromTop(20 * windowScaleH));
-        filterBandComponents[i]->typeBox.setBounds(bandBounds.removeFromTop(30 * windowScaleH));
-        filterBandComponents[i]->frequencyLabel.setBounds(bandBounds.removeFromTop(20 * windowScaleH));
-        filterBandComponents[i]->frequencySlider.setBounds(bandBounds.removeFromTop(80 * windowScaleH));
-        filterBandComponents[i]->qLabel.setBounds(bandBounds.removeFromTop(20 * windowScaleH));
-        filterBandComponents[i]->qSlider.setBounds(bandBounds.removeFromTop(80 * windowScaleH));
-        filterBandComponents[i]->gainLabel.setBounds(bandBounds.removeFromTop(20 * windowScaleH));
-        filterBandComponents[i]->gainSlider.setBounds(bandBounds.removeFromTop(80 * windowScaleH));
+        int x = i * (480 / numBands) * windowScaleW;
+        int w = (480 / numBands) * windowScaleW;
+        int h = 60 * windowScaleH;
+
+        if (x != 0)
+            x += 2 * i;
+        
+        filterBandComponents[i]->typeBox.setBounds(x, 230 * windowScaleH, w, 30 * windowScaleH);
+        filterBandComponents[i]->frequencySlider.setBounds(x, 285 * windowScaleH, w, h);
+        filterBandComponents[i]->qSlider.setBounds(x, 360 * windowScaleH, w, h);
+        filterBandComponents[i]->gainSlider.setBounds(x, 435 * windowScaleH, w, h);
     
         filterBandComponents[i]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70 * windowScaleW, 20 * windowScaleH);
         filterBandComponents[i]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70 * windowScaleW, 20 * windowScaleH);
         filterBandComponents[i]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70 * windowScaleW, 20 * windowScaleH);
     
-        filterBandComponents[i]->typeLabel.setVisible(true);
         filterBandComponents[i]->typeBox.setVisible(true);
-        filterBandComponents[i]->frequencyLabel.setVisible(true);
         filterBandComponents[i]->frequencySlider.setVisible(true);
-        filterBandComponents[i]->qLabel.setVisible(true);
         filterBandComponents[i]->qSlider.setVisible(true);
-        filterBandComponents[i]->gainLabel.setVisible(true);
         filterBandComponents[i]->gainSlider.setVisible(true);
     }
     
     for (int i = numBands; i < MAX_BANDS; ++i)
     {
-        filterBandComponents[i]->typeLabel.setVisible(false);
         filterBandComponents[i]->typeBox.setVisible(false);
-        filterBandComponents[i]->frequencyLabel.setVisible(false);
         filterBandComponents[i]->frequencySlider.setVisible(false);
-        filterBandComponents[i]->qLabel.setVisible(false);
         filterBandComponents[i]->qSlider.setVisible(false);
-        filterBandComponents[i]->gainLabel.setVisible(false);
         filterBandComponents[i]->gainSlider.setVisible(false);
     }
 }

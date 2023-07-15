@@ -1,6 +1,8 @@
 #pragma once
 #include <cmath>
 
+constexpr int NUM_PREV_FRAMES = 4;
+
 template <typename SampleType>
 class AudioBufferQueue 
 {
@@ -9,7 +11,7 @@ public:
 	static constexpr size_t bufferSize = 1U << order;
 	static constexpr size_t numBuffers = 5;
 
-	void push(const SampleType* dataToPush, size_t numSamples) 
+	void push(const SampleType* dataToPush, size_t numSamples)
 	{
 		jassert(numSamples <= bufferSize);
 		int start1, size1, start2, size2;
@@ -60,8 +62,6 @@ public:
 		auto h = (SampleType)area.getHeight();
 		auto w = (SampleType)area.getWidth();
 
-		g.setColour(juce::Colours::white);
-
 		auto spectrumRect = juce::Rectangle<SampleType>{ SampleType(0), SampleType(0), w, h };
 
 		// draw grid
@@ -83,14 +83,23 @@ public:
 			g.drawText(ampLabels[i - 1], spectrumRect.getX(), y - 10, 20, 20, juce::Justification::left);
 		}
 
-		g.setColour(juce::Colours::white);
+		g.setColour(juce::Colours::hotpink);
 
-		// probe for changes in amplitude
+		// 8 probes for changes in amplitude
 		for (int i = 0; i < 8; ++i)
 		{
-			if (spectrumData.data()[i * (spectrumData.size() / 8)] > 0.1f || 
+			if (spectrumData.data()[i * (spectrumData.size() / 8)] > 0.1f ||
 				spectrumData.data()[i * (spectrumData.size() / 8)] < -10.1f)
-				plot(spectrumData.data(), spectrumData.size() / 4, g, spectrumRect);
+			{
+				// draw the previous frames at lower opacity for a blur effect
+				for (size_t i = 0; i < prevFrames.size(); ++i)
+				{
+					float opacity = 0.1f + 0.9f * (i / (float)prevFrames.size());
+					g.setColour(juce::Colours::hotpink.withAlpha(opacity));
+
+					plot(prevFrames[i].data(), prevFrames[i].size() / 4, g, spectrumRect);
+				}
+			}
 		}
 	}
 
@@ -99,12 +108,14 @@ public:
 private:
 	AudioBufferQueue<SampleType>& audioBufferQueue;
 	std::array<SampleType, AudioBufferQueue<SampleType>::bufferSize> buffer;
+	std::array<std::array<SampleType, 2 * AudioBufferQueue<SampleType>::bufferSize>, NUM_PREV_FRAMES> prevFrames;
+	int currentFrame = 0;
 	juce::dsp::FFT fft{ AudioBufferQueue<SampleType>::order };
 	juce::dsp::WindowingFunction<SampleType> windowFun{ (size_t)fft.getSize(),
 		                             juce::dsp::WindowingFunction<SampleType>::hann };
 	std::array<SampleType, 2 * AudioBufferQueue<SampleType>::bufferSize> spectrumData;
 	const char* xLabels[9] { "64", "128", "256", "512", "1k", "2k", "4k", "8k", "16k"};
-	const char* ampLabels[7] { "18", "12", "6", "0", "-6", "-12", "-18" };
+	const char* ampLabels[7] { " 18", " 12", "  6", "  0", " -6", "-12", "-18" };
 
 	void timerCallback() override 
 	{
@@ -117,6 +128,11 @@ private:
 		static constexpr auto maxdB = SampleType(0);
 		for (auto& s : spectrumData)
 			s = jmap(jlimit(mindB, maxdB, juce::Decibels::gainToDecibels(s) - juce::Decibels::gainToDecibels(SampleType((size_t)fft.getSize()))), mindB, maxdB, SampleType(0), SampleType(1));
+		
+
+		prevFrames[currentFrame++] = spectrumData;
+		currentFrame %= NUM_PREV_FRAMES;
+
 		repaint();
 	}
 
@@ -146,9 +162,6 @@ private:
 			g.drawLine({ left + prevXPos, center - gain * data[i - 1], left + xPos, center - gain * data[i] });
 		}
 	}
-
-
-
 };
 
 template <typename SampleType>

@@ -16,7 +16,7 @@ public:
             g.fillAll(juce::Colours::silver);
 
         g.setColour(isHighlighted ? juce::Colours::black : juce::Colours::white);
-        g.setFont(juce::Font(16.0f * windowScale));
+        g.setFont(juce::Font("Lucida Console", 13.0f * windowScale, juce::Font::bold));
         g.drawText(text, area, juce::Justification::centred);
     }
     
@@ -61,7 +61,7 @@ public:
             .withAlpha((slider.isMouseOverOrDragging() && slider.getSliderStyle() != juce::Slider::SliderStyle::LinearBar
                         && slider.getSliderStyle() != juce::Slider::SliderStyle::LinearBarVertical) ? 0.7f : 0.3f));
         l->setColour(juce::TextEditor::outlineColourId, slider.findColour(juce::Slider::textBoxOutlineColourId));
-        l->setFont(juce::Font("Lucida Console", 7.f * windowScale, juce::Font::bold));
+        l->setFont(juce::Font("Lucida Console", 11.f * windowScale, juce::Font::bold));
         l->setJustificationType(juce::Justification::centred);
         
         return l;
@@ -69,7 +69,7 @@ public:
 
     juce::Font getLabelFont(juce::Label& label) override
     {
-        return juce::Font(juce::Font("Lucida Console", 7.f * windowScale, juce::Font::bold));
+        return juce::Font(juce::Font("Lucida Console", 13.f * windowScale, juce::Font::bold));
     }
 
     void drawComboBox(juce::Graphics&, int, int, bool, int, int, int, int, juce::ComboBox&) override;

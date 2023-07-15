@@ -31,7 +31,7 @@ private:
     std::unique_ptr<ScopeComponent<float>> spectrumPlotComponent;
     
     juce::ComboBox numBandsBox;
-    juce::Label numBandsLabel;
+    juce::Label numBandsLabel, typeLabel, frequencyLabel, qLabel, gainLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> numBandsAttachment;
     int numBands = 8;
     
