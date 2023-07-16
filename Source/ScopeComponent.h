@@ -1,7 +1,7 @@
 #pragma once
 #include <cmath>
 
-constexpr int NUM_PREV_FRAMES = 4;
+constexpr int NUM_PREV_FRAMES = 2;
 
 template <typename SampleType>
 class AudioBufferQueue 
@@ -91,7 +91,6 @@ public:
 			if (spectrumData.data()[i * (spectrumData.size() / 8)] > 0.1f ||
 				spectrumData.data()[i * (spectrumData.size() / 8)] < -10.1f)
 			{
-				// draw the previous frames at lower opacity for a blur effect
 				for (size_t i = 0; i < prevFrames.size(); ++i)
 				{
 					float opacity = 0.1f + 0.9f * (i / (float)prevFrames.size());
