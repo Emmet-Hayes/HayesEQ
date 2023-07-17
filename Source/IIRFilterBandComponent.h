@@ -1,5 +1,7 @@
 #pragma once
-#include "LogSlider.h"
+#include "LogFreqSlider.h"
+#include "LogQSlider.h"
+#include "DbSlider.h"
 
 class IIRFilterBandComponent
 {
@@ -7,7 +9,7 @@ public:
     IIRFilterBandComponent()
     {
     }
-    
+
     virtual ~IIRFilterBandComponent()
     {
         frequencyAttachment = nullptr;
@@ -15,16 +17,11 @@ public:
         gainAttachment = nullptr;
         typeAttachment = nullptr;
     }
-    
+
     juce::ComboBox typeBox;
-    LogSlider frequencySlider;
-    LogSlider qSlider;
-    juce::Slider gainSlider;
-    
-    juce::Label typeLabel;
-    juce::Label frequencyLabel;
-    juce::Label qLabel;
-    juce::Label gainLabel;
+    LogFreqSlider frequencySlider;
+    LogQSlider qSlider;
+    DbSlider gainSlider;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> frequencyAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> qAttachment;
