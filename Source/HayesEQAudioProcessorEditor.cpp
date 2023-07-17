@@ -4,6 +4,7 @@
 HayesEQAudioProcessorEditor::HayesEQAudioProcessorEditor(HayesEQAudioProcessor& p)
 :   AudioProcessorEditor { &p }
 ,   processor { p }
+,   presetBar { p }
 {
     addAllPanelComponents();
     startTimerHz(60);
@@ -50,7 +51,6 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
     gainLabel.setJustificationType(juce::Justification::centred);
     gainLabel.setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(gainLabel);
-
 
     for (int i = 0; i < MAX_BANDS; ++i)
     {
@@ -117,6 +117,9 @@ void HayesEQAudioProcessorEditor::createIIRSliders(int index)
     addAndMakeVisible(filterBandComponents[index]->gainSlider);
     filterBandComponents[index]->gainAttachment = std::make_unique<Attachment>(processor.apvts, 
         gstr, filterBandComponents[index]->gainSlider);
+
+    presetBar.setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(presetBar);
 }
 
 bool HayesEQAudioProcessorEditor::isPeakFilterSelected(int index) const
@@ -138,8 +141,9 @@ void HayesEQAudioProcessorEditor::resized()
     int topButtonWidth = totalWidth * 0.2;
     int offset = (bandWidth - reducedWidth) / 2;
 
-    numBandsLabel.setBounds(30 * windowScaleW, 5 * windowScaleH, 140 * windowScaleW, 25 * windowScaleH);
-    numBandsBox.setBounds(170 * windowScaleW, 5 * windowScaleH, 50 * windowScaleW, 25 * windowScaleH);
+    presetBar.setBounds(0, 5 * windowScaleH, 300 * windowScaleW, 25 * windowScaleH);
+    numBandsLabel.setBounds(300 * windowScaleW, 5 * windowScaleH, 140 * windowScaleW, 25 * windowScaleH);
+    numBandsBox.setBounds(440 * windowScaleW, 5 * windowScaleH, 50 * windowScaleW, 25 * windowScaleH);
     spectrumPlotComponent->setBounds(0, 20 * windowScaleH, 500 * windowScaleW, 200 * windowScaleH);
 
     typeLabel.setBounds(150, 207 * windowScaleH, 200 * windowScaleW, 25 * windowScaleH);

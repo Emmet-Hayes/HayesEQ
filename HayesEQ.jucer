@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT name="HayesEQ" companyName="EmmetSoft" version="1.0.0" displaySplashScreen="1"
-              defines="PIP_JUCE_EXAMPLES_DIRECTORY=L2hvbWUvZW1tZXQvRG9jdW1lbnRzL0pVQ0UvZXhhbXBsZXM="
-              projectType="audioplug" useAppConfig="0" addUsingNamespaceToJuceHeader="1"
-              id="pRVjbr" jucerFormatVersion="1" pluginFormats="buildAU,buildLV2,buildStandalone,buildVST3">
+              defines="JUCE_MODAL_LOOPS_PERMITTED=1" projectType="audioplug"
+              useAppConfig="0" addUsingNamespaceToJuceHeader="1" id="pRVjbr"
+              jucerFormatVersion="1" pluginFormats="buildAU,buildLV2,buildStandalone,buildVST3">
   <MAINGROUP id="BE1GVm" name="HayesEQ">
     <GROUP id="{CE2A1EFF-709F-E63D-44FF-CA2F032D66D5}" name="Source">
+      <FILE id="M4CnKz" name="PresetComboBox.cpp" compile="1" resource="0"
+            file="Source/PresetComboBox.cpp"/>
+      <FILE id="VAOwiI" name="PresetComboBox.h" compile="0" resource="0"
+            file="Source/PresetComboBox.h"/>
+      <FILE id="M7frhh" name="PresetBar.cpp" compile="1" resource="0" file="Source/PresetBar.cpp"/>
+      <FILE id="GBmR4l" name="PresetBar.h" compile="0" resource="0" file="Source/PresetBar.h"/>
       <FILE id="ovwQO7" name="ScopeComponent.h" compile="0" resource="0"
             file="Source/ScopeComponent.h"/>
       <FILE id="tVxFY5" name="CustomLookAndFeel.h" compile="0" resource="0"

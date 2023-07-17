@@ -1,6 +1,7 @@
 #pragma once
 #include "HayesEQAudioProcessor.h"
 #include "CustomLookAndFeel.h"
+#include "PresetBar.h"
 
 class IIRFilterBandComponent;
 
@@ -24,6 +25,8 @@ private:
     void createIIRSliders(int index);
     bool isPeakFilterSelected(int index) const;
     
+    PresetBar presetBar;
+
     CustomLookAndFeel customLookAndFeel;
     juce::Image image;
     
