@@ -1,11 +1,12 @@
 #pragma once
 #include "HayesEQAudioProcessor.h"
-#include "CustomLookAndFeel.h"
-#include "PresetBar.h"
+#include "../../Common/BaseAudioProcessorEditor.h"
+#include "../../Common/CustomLookAndFeel.h"
+#include "../../Common/PresetBar.h"
 
 class IIRFilterBandComponent;
 
-class HayesEQAudioProcessorEditor : public juce::AudioProcessorEditor
+class HayesEQAudioProcessorEditor : public BaseAudioProcessorEditor
                                   , public juce::ComboBox::Listener
                                   , private juce::Timer
 {
@@ -31,7 +32,7 @@ private:
     juce::Image image;
     
     std::vector<std::unique_ptr<IIRFilterBandComponent>> filterBandComponents;
-    std::unique_ptr<ScopeComponent<float>> spectrumPlotComponent;
+    std::unique_ptr<SpectrumScopeComponent<float>> spectrumPlotComponent;
     
     juce::ComboBox numBandsBox;
     juce::Label numBandsLabel, typeLabel, frequencyLabel, qLabel, gainLabel;

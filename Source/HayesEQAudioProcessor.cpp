@@ -1,9 +1,9 @@
 #include "HayesEQAudioProcessor.h"
 #include "HayesEQAudioProcessorEditor.h"
-#include "Utilities.h"
+#include "../../Common/Utilities.h"
 
 HayesEQAudioProcessor::HayesEQAudioProcessor()
-:   apvts (*this, nullptr, "PARAMETERS", createParameterLayout())
+:   BaseAudioProcessor(createParameterLayout())
 {
 }
 
@@ -50,27 +50,10 @@ void HayesEQAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce:
     scopeDataCollector.process(context.getOutputBlock().getChannelPointer(0), context.getOutputBlock().getNumSamples()); 
 }
 
-
 AudioProcessorEditor* HayesEQAudioProcessor::createEditor() 
 {
     return new HayesEQAudioProcessorEditor(*this);
 }
-
-
-void HayesEQAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
-{
-    if (auto xml = apvts.state.createXml())
-        copyXmlToBinary(*xml, destData);
-}
-
-
-void HayesEQAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
-{
-    if (auto xml = getXmlFromBinary(data, sizeInBytes))
-        if (xml->hasTagName(apvts.state.getType()))
-            apvts.state = ValueTree::fromXml(*xml);
-}
-
 
 void HayesEQAudioProcessor::updateParameters()
 {

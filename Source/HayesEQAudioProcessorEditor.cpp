@@ -2,7 +2,7 @@
 #include "IIRFilterBandComponent.h"
 
 HayesEQAudioProcessorEditor::HayesEQAudioProcessorEditor(HayesEQAudioProcessor& p)
-:   AudioProcessorEditor { &p }
+:   BaseAudioProcessorEditor { p }
 ,   processor { p }
 ,   presetBar { p }
 {
@@ -62,7 +62,7 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
         filterBandComponents[i]->gainSlider.setEnabled(isPeakFilterSelected(i));
     }
   
-    spectrumPlotComponent = std::make_unique<ScopeComponent<float>>(processor.audioBufferQueue);
+    spectrumPlotComponent = std::make_unique<SpectrumScopeComponent<float>>(processor.audioBufferQueue);
     addAndMakeVisible(spectrumPlotComponent.get());
     
     image = juce::ImageCache::getFromMemory(BinaryData::bgfile_jpg, BinaryData::bgfile_jpgSize);

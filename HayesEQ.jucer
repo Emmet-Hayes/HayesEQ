@@ -6,23 +6,33 @@
               jucerFormatVersion="1" pluginFormats="buildAU,buildLV2,buildStandalone,buildVST3">
   <MAINGROUP id="BE1GVm" name="HayesEQ">
     <GROUP id="{CE2A1EFF-709F-E63D-44FF-CA2F032D66D5}" name="Source">
-      <FILE id="M4CnKz" name="PresetComboBox.cpp" compile="1" resource="0"
-            file="Source/PresetComboBox.cpp"/>
-      <FILE id="VAOwiI" name="PresetComboBox.h" compile="0" resource="0"
-            file="Source/PresetComboBox.h"/>
-      <FILE id="M7frhh" name="PresetBar.cpp" compile="1" resource="0" file="Source/PresetBar.cpp"/>
-      <FILE id="GBmR4l" name="PresetBar.h" compile="0" resource="0" file="Source/PresetBar.h"/>
-      <FILE id="ovwQO7" name="ScopeComponent.h" compile="0" resource="0"
-            file="Source/ScopeComponent.h"/>
-      <FILE id="tVxFY5" name="CustomLookAndFeel.h" compile="0" resource="0"
-            file="Source/CustomLookAndFeel.h"/>
-      <FILE id="SOmKes" name="CustomLookAndFeel.cpp" compile="1" resource="0"
-            file="Source/CustomLookAndFeel.cpp"/>
-      <FILE id="WMMgcy" name="DbSlider.h" compile="0" resource="0" file="Source/DbSlider.h"/>
-      <FILE id="sFV2Ok" name="LogFreqSlider.h" compile="0" resource="0" file="Source/LogFreqSlider.h"/>
-      <FILE id="XUqQ6x" name="LogQSlider.h" compile="0" resource="0" file="Source/LogQSlider.h"/>
-      <FILE id="N3iDqw" name="Utilities.h" compile="0" resource="0" file="Source/Utilities.h"/>
-      <FILE id="fPSiMo" name="CentredLabel.h" compile="0" resource="0" file="Source/CentredLabel.h"/>
+      <GROUP id="{9E22AE88-FDD4-22CB-8939-AE7B6E2596A3}" name="Common">
+        <FILE id="eIMOlR" name="BaseAudioProcessor.cpp" compile="1" resource="0"
+              file="../Common/BaseAudioProcessor.cpp"/>
+        <FILE id="Nm65Kk" name="BaseAudioProcessor.h" compile="0" resource="0"
+              file="../Common/BaseAudioProcessor.h"/>
+        <FILE id="QmEtEU" name="BaseAudioProcessorEditor.cpp" compile="1" resource="0"
+              file="../Common/BaseAudioProcessorEditor.cpp"/>
+        <FILE id="NKPZPC" name="BaseAudioProcessorEditor.h" compile="0" resource="0"
+              file="../Common/BaseAudioProcessorEditor.h"/>
+        <FILE id="XbXwEy" name="CentredLabel.h" compile="0" resource="0" file="../Common/CentredLabel.h"/>
+        <FILE id="MASIXa" name="CustomLookAndFeel.cpp" compile="1" resource="0"
+              file="../Common/CustomLookAndFeel.cpp"/>
+        <FILE id="BuPDCc" name="CustomLookAndFeel.h" compile="0" resource="0"
+              file="../Common/CustomLookAndFeel.h"/>
+        <FILE id="OKtYoZ" name="DbSlider.h" compile="0" resource="0" file="../Common/DbSlider.h"/>
+        <FILE id="zjloCG" name="LogFreqSlider.h" compile="0" resource="0" file="../Common/LogFreqSlider.h"/>
+        <FILE id="HYGp6T" name="LogQSlider.h" compile="0" resource="0" file="../Common/LogQSlider.h"/>
+        <FILE id="WrnoDm" name="PresetBar.cpp" compile="1" resource="0" file="../Common/PresetBar.cpp"/>
+        <FILE id="rMDBfV" name="PresetBar.h" compile="0" resource="0" file="../Common/PresetBar.h"/>
+        <FILE id="RRVkEd" name="PresetComboBox.cpp" compile="1" resource="0"
+              file="../Common/PresetComboBox.cpp"/>
+        <FILE id="hTOix6" name="PresetComboBox.h" compile="0" resource="0"
+              file="../Common/PresetComboBox.h"/>
+        <FILE id="vApKaC" name="SpectrumScopeComponent.h" compile="0" resource="0"
+              file="../Common/SpectrumScopeComponent.h"/>
+        <FILE id="KPijMS" name="Utilities.h" compile="0" resource="0" file="../Common/Utilities.h"/>
+      </GROUP>
       <FILE id="cCUZyb" name="IIRFilterBandComponent.h" compile="0" resource="0"
             file="Source/IIRFilterBandComponent.h"/>
       <FILE id="vT4KGJ" name="HayesEQAudioProcessorEditor.cpp" compile="1"
@@ -55,8 +65,10 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="3"/>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" macOSDeploymentTarget="10.9"
+                       osxCompatibility="10.9 SDK"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" macOSDeploymentTarget="10.9"
+                       osxCompatibility="10.9 SDK"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path=""/>

@@ -1,7 +1,7 @@
 #pragma once
-#include "LogFreqSlider.h"
-#include "LogQSlider.h"
-#include "DbSlider.h"
+#include "../../Common/LogFreqSlider.h"
+#include "../../Common/LogQSlider.h"
+#include "../../Common/DbSlider.h"
 
 class IIRFilterBandComponent
 {
