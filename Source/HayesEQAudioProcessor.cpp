@@ -40,6 +40,15 @@ void HayesEQAudioProcessor::prepareToPlay(double sr, int samplesPerBlock)
 
 void HayesEQAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& /*midi*/)
 {
+    juce::ScopedNoDenormals noDenormals;
+    const auto totalNumInputChannels = getTotalNumInputChannels();
+    const auto totalNumOutputChannels = getTotalNumOutputChannels();
+    const auto numSamples = buffer.getNumSamples();
+
+    // Clear buffer
+    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+        buffer.clear(i, 0, numSamples);
+    
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
     updateParameters();

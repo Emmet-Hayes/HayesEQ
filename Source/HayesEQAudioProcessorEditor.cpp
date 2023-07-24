@@ -3,8 +3,8 @@
 
 HayesEQAudioProcessorEditor::HayesEQAudioProcessorEditor(HayesEQAudioProcessor& p)
 :   BaseAudioProcessorEditor { p }
-,   processor { p }
 ,   presetBar { p }
+,   processor { p }
 {
     addAllPanelComponents();
     startTimerHz(60);
@@ -133,13 +133,6 @@ void HayesEQAudioProcessorEditor::resized()
     windowScaleW = getWidth() / 500.0f;
     windowScaleH = getHeight() / 500.0f;
     customLookAndFeel.setWindowScale((static_cast<double>(windowScaleW) + windowScaleH) / 2.0);
-    
-    auto bounds = getLocalBounds();
-    int totalWidth = getWidth();
-    int bandWidth = totalWidth / numBands;
-    int reducedWidth = bandWidth * 0.9;
-    int topButtonWidth = totalWidth * 0.2;
-    int offset = (bandWidth - reducedWidth) / 2;
 
     presetBar.setBounds(0, 5 * windowScaleH, 300 * windowScaleW, 25 * windowScaleH);
     numBandsLabel.setBounds(300 * windowScaleW, 5 * windowScaleH, 140 * windowScaleW, 25 * windowScaleH);
