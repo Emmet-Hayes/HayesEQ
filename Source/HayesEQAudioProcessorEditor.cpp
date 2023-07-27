@@ -62,7 +62,7 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
         filterBandComponents[i]->gainSlider.setEnabled(isPeakFilterSelected(i));
     }
   
-    spectrumPlotComponent = std::make_unique<SpectrumScopeComponent<float>>(processor.audioBufferQueue);
+    spectrumPlotComponent = std::make_unique<SpectrumScopeComponent<float>>(processor.audioBufferQueue, customLookAndFeel);
     addAndMakeVisible(spectrumPlotComponent.get());
     
     image = juce::ImageCache::getFromMemory(BinaryData::bgfile_jpg, BinaryData::bgfile_jpgSize);
@@ -133,7 +133,8 @@ void HayesEQAudioProcessorEditor::resized()
     windowScaleW = getWidth() / 500.0f;
     windowScaleH = getHeight() / 500.0f;
     customLookAndFeel.setWindowScale((static_cast<double>(windowScaleW) + windowScaleH) / 2.0);
-    
+    spectrumPlotComponent->setScale(windowScaleW, windowScaleH);
+
     auto bounds = getLocalBounds();
     int totalWidth = getWidth();
     int bandWidth = totalWidth / numBands;
@@ -144,7 +145,7 @@ void HayesEQAudioProcessorEditor::resized()
     presetBar.setBounds(0, 5 * windowScaleH, 300 * windowScaleW, 25 * windowScaleH);
     numBandsLabel.setBounds(300 * windowScaleW, 5 * windowScaleH, 140 * windowScaleW, 25 * windowScaleH);
     numBandsBox.setBounds(440 * windowScaleW, 5 * windowScaleH, 50 * windowScaleW, 25 * windowScaleH);
-    spectrumPlotComponent->setBounds(0, 20 * windowScaleH, 500 * windowScaleW, 200 * windowScaleH);
+    spectrumPlotComponent->setBounds(10, 30 * windowScaleH, 480 * windowScaleW, 170 * windowScaleH);
 
     typeLabel.setBounds(150, 207 * windowScaleH, 200 * windowScaleW, 25 * windowScaleH);
     frequencyLabel.setBounds(150, 257 * windowScaleH, 200 * windowScaleW, 25 * windowScaleH);
