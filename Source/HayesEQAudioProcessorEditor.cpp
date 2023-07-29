@@ -77,7 +77,7 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
     setResizeLimits(500, 500, 1000, 1000);
 }
 
-void HayesEQAudioProcessorEditor::createIIRComboBox(int index, const char* guilabel, const char* treelabel,
+void HayesEQAudioProcessorEditor::createIIRComboBox(int index, const char* /*guilabel*/, const char* treelabel,
                                                       const juce::StringArray& itemList, int defaultItem)
 {
     using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
@@ -132,43 +132,48 @@ void HayesEQAudioProcessorEditor::resized()
     resizer->setBounds(getWidth() - 20, getHeight() - 20, 20, 20);
     windowScaleW = getWidth() / 500.0f;
     windowScaleH = getHeight() / 500.0f;
-    customLookAndFeel.setWindowScale((static_cast<double>(windowScaleW) + windowScaleH) / 2.0);
+    customLookAndFeel.setWindowScale((windowScaleW + windowScaleH) / 2.0f);
     spectrumPlotComponent->setScale(windowScaleW, windowScaleH);
 
-    auto bounds = getLocalBounds();
-    int totalWidth = getWidth();
-    int bandWidth = totalWidth / numBands;
-    int reducedWidth = bandWidth * 0.9;
-    int topButtonWidth = totalWidth * 0.2;
-    int offset = (bandWidth - reducedWidth) / 2;
+    auto setBoundsAndApplyScaling = [&](juce::Component& c, int x, int y, int w, int h)
+    {
+        int sx = static_cast<int>(x * windowScaleW);
+        int sy = static_cast<int>(y * windowScaleH);
+        int sw = static_cast<int>(w * windowScaleW);
+        int sh = static_cast<int>(h * windowScaleH);
+        c.setBounds(sx, sy, sw, sh);
+    };
 
-    presetBar.setBounds(0, 5 * windowScaleH, 300 * windowScaleW, 25 * windowScaleH);
-    numBandsLabel.setBounds(300 * windowScaleW, 5 * windowScaleH, 140 * windowScaleW, 25 * windowScaleH);
-    numBandsBox.setBounds(440 * windowScaleW, 5 * windowScaleH, 50 * windowScaleW, 25 * windowScaleH);
-    spectrumPlotComponent->setBounds(10, 30 * windowScaleH, 480 * windowScaleW, 170 * windowScaleH);
+    setBoundsAndApplyScaling(presetBar, 0, 5, 300, 25);
+    setBoundsAndApplyScaling(numBandsLabel, 300, 5, 140, 25);
+    setBoundsAndApplyScaling(numBandsBox, 440, 5, 50, 25);
+    setBoundsAndApplyScaling(*spectrumPlotComponent, 10, 30, 480, 170);
 
-    typeLabel.setBounds(150, 207 * windowScaleH, 200 * windowScaleW, 25 * windowScaleH);
-    frequencyLabel.setBounds(150, 257 * windowScaleH, 200 * windowScaleW, 25 * windowScaleH);
-    qLabel.setBounds(150, 342 * windowScaleH, 200 * windowScaleW, 25 * windowScaleH);
-    gainLabel.setBounds(150, 417 * windowScaleH, 200 * windowScaleW, 25 * windowScaleH);
+    setBoundsAndApplyScaling(typeLabel, 150, 207, 200, 25);
+    setBoundsAndApplyScaling(frequencyLabel, 150, 257, 200, 25);
+    setBoundsAndApplyScaling(qLabel, 150, 342, 200, 25);
+    setBoundsAndApplyScaling(gainLabel, 150, 417, 200, 25);
 
     for (int i = 0; i < numBands; ++i)
     {
-        int x = i * (480 / numBands) * windowScaleW;
-        int w = (480 / numBands) * windowScaleW;
-        int h = 60 * windowScaleH;
+        int x = i * (480 / numBands);
+        int w = (480 / numBands);
+        int h = 60;
 
         if (x != 0)
             x += 2 * i;
         
-        filterBandComponents[i]->typeBox.setBounds(x, 230 * windowScaleH, w, 30 * windowScaleH);
-        filterBandComponents[i]->frequencySlider.setBounds(x, 285 * windowScaleH, w, h);
-        filterBandComponents[i]->qSlider.setBounds(x, 360 * windowScaleH, w, h);
-        filterBandComponents[i]->gainSlider.setBounds(x, 435 * windowScaleH, w, h);
+        setBoundsAndApplyScaling(filterBandComponents[i]->typeBox,         x, 230, w, 30);
+        setBoundsAndApplyScaling(filterBandComponents[i]->frequencySlider, x, 285, w, h);
+        setBoundsAndApplyScaling(filterBandComponents[i]->qSlider,         x, 360, w, h);
+        setBoundsAndApplyScaling(filterBandComponents[i]->gainSlider,      x, 435, w, h);
     
-        filterBandComponents[i]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70 * windowScaleW, 20 * windowScaleH);
-        filterBandComponents[i]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70 * windowScaleW, 20 * windowScaleH);
-        filterBandComponents[i]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70 * windowScaleW, 20 * windowScaleH);
+        filterBandComponents[i]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 
+                                                                 static_cast<int>(70 * windowScaleW), static_cast<int>(20 * windowScaleH));
+        filterBandComponents[i]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false,
+                                                         static_cast<int>(70 * windowScaleW), static_cast<int>(20 * windowScaleH));
+        filterBandComponents[i]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false,
+                                                            static_cast<int>(70 * windowScaleW), static_cast<int>(20 * windowScaleH));
     
         filterBandComponents[i]->typeBox.setVisible(true);
         filterBandComponents[i]->frequencySlider.setVisible(true);

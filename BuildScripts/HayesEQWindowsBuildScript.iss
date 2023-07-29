@@ -7,7 +7,7 @@
 AppId={{93951FDE-7122-4745-90CE-EBB71DD44D24}}
 AppName=HayesEQ
 AppVersion=1.0.0
-DefaultDirName={pf64}\Common Files\VST3\HayesEQ\VST3
+DefaultDirName={commonpf64}\Common Files\VST3\HayesEQ\VST3
 DefaultGroupName=EmmetSoft
 OutputDir=userdocs:HayesPlugins\HayesInstallers
 OutputBaseFilename=HayesEQInstaller

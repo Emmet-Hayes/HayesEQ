@@ -3,7 +3,7 @@
 <JUCERPROJECT name="HayesEQ" companyName="EmmetSoft" version="1.0.0" displaySplashScreen="1"
               defines="JUCE_MODAL_LOOPS_PERMITTED=1" projectType="audioplug"
               useAppConfig="0" addUsingNamespaceToJuceHeader="1" id="pRVjbr"
-              jucerFormatVersion="1" pluginFormats="buildAU,buildLV2,buildStandalone,buildVST3">
+              jucerFormatVersion="1" pluginFormats="buildAU,buildVST3">
   <MAINGROUP id="BE1GVm" name="HayesEQ">
     <GROUP id="{607EEB8A-C618-D57C-027E-C257D5C5FBFE}" name="Resources">
       <GROUP id="{52404770-557A-2882-06B3-89F60543A011}" name="Images">
@@ -11,6 +11,10 @@
       </GROUP>
     </GROUP>
     <GROUP id="{9E22AE88-FDD4-22CB-8939-AE7B6E2596A3}" name="Common">
+      <GROUP id="{E9E0D1D9-8E8E-2345-C248-A972AA46E6EB}" name="Fonts">
+        <FILE id="zg4X6X" name="Juliafont-Regular.ttf" compile="0" resource="1"
+              file="../Common/Fonts/Juliafont-Regular.ttf"/>
+      </GROUP>
       <FILE id="eIMOlR" name="BaseAudioProcessor.cpp" compile="1" resource="0"
             file="../Common/BaseAudioProcessor.cpp"/>
       <FILE id="Nm65Kk" name="BaseAudioProcessor.h" compile="0" resource="0"
