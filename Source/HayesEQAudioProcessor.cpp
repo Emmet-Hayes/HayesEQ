@@ -83,10 +83,11 @@ void HayesEQAudioProcessor::updateParameters()
 
             switch (type)
             {
-                case 0: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makeBandPass(sampleRate, frequency, qVal); break;
+                case 0: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makeBandPass  (sampleRate, frequency, qVal); break;
                 case 1: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makePeakFilter(sampleRate, frequency, qVal, juce::Decibels::decibelsToGain(gain)); break;
-                case 2: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makeLowPass (sampleRate, frequency, qVal); break;
-                case 3: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makeHighPass(sampleRate, frequency, qVal); break;
+                case 2: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makeLowPass   (sampleRate, frequency, qVal); break;
+                case 3: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makeHighPass  (sampleRate, frequency, qVal); break;
+                case 4: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makeNotch     (sampleRate, frequency, qVal); break;
                 default: *iirs[i].state = juce::dsp::IIR::ArrayCoefficients<float>::makePeakFilter(sampleRate, frequency, qVal, juce::Decibels::decibelsToGain(gain));
             }
         }

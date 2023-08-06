@@ -8,6 +8,7 @@ class IIRFilterBandComponent;
 
 class HayesEQAudioProcessorEditor : public BaseAudioProcessorEditor
                                   , public juce::ComboBox::Listener
+                                  , public juce::Button::Listener
                                   , private juce::Timer
 {
 public:
@@ -17,6 +18,7 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override;
     void comboBoxChanged(ComboBox* comboBox) override;
+    void buttonClicked(juce::Button* button) override;
     void timerCallback() override;
 
 private:
@@ -33,6 +35,7 @@ private:
     
     std::vector<std::unique_ptr<IIRFilterBandComponent>> filterBandComponents;
     std::unique_ptr<SpectrumScopeComponent<float>> spectrumPlotComponent;
+    juce::TextButton zoomButton;
     
     juce::ComboBox numBandsBox;
     juce::Label numBandsLabel, typeLabel, frequencyLabel, qLabel, gainLabel;

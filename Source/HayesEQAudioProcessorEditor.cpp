@@ -64,6 +64,11 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
   
     spectrumPlotComponent = std::make_unique<SpectrumScopeComponent<float>>(processor.audioBufferQueue, customLookAndFeel);
     addAndMakeVisible(spectrumPlotComponent.get());
+
+    zoomButton.setToggleable(true);
+    zoomButton.setLookAndFeel(&customLookAndFeel);
+    zoomButton.addListener(this);
+    addAndMakeVisible(zoomButton);
     
     image = juce::ImageCache::getFromMemory(BinaryData::bgfile_jpg, BinaryData::bgfile_jpgSize);
     
@@ -147,46 +152,73 @@ void HayesEQAudioProcessorEditor::resized()
     setBoundsAndApplyScaling(presetBar, 0, 5, 300, 25);
     setBoundsAndApplyScaling(numBandsLabel, 300, 5, 140, 25);
     setBoundsAndApplyScaling(numBandsBox, 440, 5, 50, 25);
-    setBoundsAndApplyScaling(*spectrumPlotComponent, 10, 30, 480, 170);
-
-    setBoundsAndApplyScaling(typeLabel, 150, 207, 200, 25);
-    setBoundsAndApplyScaling(frequencyLabel, 150, 257, 200, 25);
-    setBoundsAndApplyScaling(qLabel, 150, 342, 200, 25);
-    setBoundsAndApplyScaling(gainLabel, 150, 417, 200, 25);
-
-    for (int i = 0; i < numBands; ++i)
+    if (zoomButton.getToggleState())
     {
-        int x = i * (480 / numBands);
-        int w = (480 / numBands);
-        int h = 60;
+        setBoundsAndApplyScaling(*spectrumPlotComponent, 0, 30, 500, 470);
+        setBoundsAndApplyScaling(zoomButton, 470, 470, 20, 20);
 
-        if (x != 0)
-            x += 2 * i;
-        
-        setBoundsAndApplyScaling(filterBandComponents[i]->typeBox,         x, 230, w, 30);
-        setBoundsAndApplyScaling(filterBandComponents[i]->frequencySlider, x, 285, w, h);
-        setBoundsAndApplyScaling(filterBandComponents[i]->qSlider,         x, 360, w, h);
-        setBoundsAndApplyScaling(filterBandComponents[i]->gainSlider,      x, 435, w, h);
-    
-        filterBandComponents[i]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 
-                                                                 static_cast<int>(70 * windowScaleW), static_cast<int>(20 * windowScaleH));
-        filterBandComponents[i]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false,
-                                                         static_cast<int>(70 * windowScaleW), static_cast<int>(20 * windowScaleH));
-        filterBandComponents[i]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false,
-                                                            static_cast<int>(70 * windowScaleW), static_cast<int>(20 * windowScaleH));
-    
-        filterBandComponents[i]->typeBox.setVisible(true);
-        filterBandComponents[i]->frequencySlider.setVisible(true);
-        filterBandComponents[i]->qSlider.setVisible(true);
-        filterBandComponents[i]->gainSlider.setVisible(true);
+        typeLabel.setVisible(false);
+        frequencyLabel.setVisible(false);
+        qLabel.setVisible(false);
+        gainLabel.setVisible(false);
+
+        for (int i = 0; i < MAX_BANDS; ++i)
+        {
+            filterBandComponents[i]->typeBox.setVisible(false);
+            filterBandComponents[i]->frequencySlider.setVisible(false);
+            filterBandComponents[i]->qSlider.setVisible(false);
+            filterBandComponents[i]->gainSlider.setVisible(false);
+        }
     }
-    
-    for (int i = numBands; i < MAX_BANDS; ++i)
+    else
     {
-        filterBandComponents[i]->typeBox.setVisible(false);
-        filterBandComponents[i]->frequencySlider.setVisible(false);
-        filterBandComponents[i]->qSlider.setVisible(false);
-        filterBandComponents[i]->gainSlider.setVisible(false);
+        setBoundsAndApplyScaling(*spectrumPlotComponent, 10, 30, 480, 170);
+        setBoundsAndApplyScaling(zoomButton, 470, 200, 20, 20);
+
+        setBoundsAndApplyScaling(typeLabel, 150, 207, 200, 25);
+        setBoundsAndApplyScaling(frequencyLabel, 150, 257, 200, 25);
+        setBoundsAndApplyScaling(qLabel, 150, 342, 200, 25);
+        setBoundsAndApplyScaling(gainLabel, 150, 417, 200, 25);
+
+        typeLabel.setVisible(true);
+        frequencyLabel.setVisible(true);
+        qLabel.setVisible(true);
+        gainLabel.setVisible(true);
+
+        for (int i = 0; i < numBands; ++i)
+        {
+            int x = i * (480 / numBands);
+            int w = (480 / numBands);
+            int h = 60;
+
+            if (x != 0) // maintain blank separator area
+                x += 2 * i;
+
+            setBoundsAndApplyScaling(filterBandComponents[i]->typeBox, x, 230, w, 30);
+            setBoundsAndApplyScaling(filterBandComponents[i]->frequencySlider, x, 285, w, h);
+            setBoundsAndApplyScaling(filterBandComponents[i]->qSlider, x, 360, w, h);
+            setBoundsAndApplyScaling(filterBandComponents[i]->gainSlider, x, 435, w, h);
+
+            filterBandComponents[i]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false,
+                static_cast<int>(70 * windowScaleW), static_cast<int>(20 * windowScaleH));
+            filterBandComponents[i]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false,
+                static_cast<int>(70 * windowScaleW), static_cast<int>(20 * windowScaleH));
+            filterBandComponents[i]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false,
+                static_cast<int>(70 * windowScaleW), static_cast<int>(20 * windowScaleH));
+
+            filterBandComponents[i]->typeBox.setVisible(true);
+            filterBandComponents[i]->frequencySlider.setVisible(true);
+            filterBandComponents[i]->qSlider.setVisible(true);
+            filterBandComponents[i]->gainSlider.setVisible(true);
+        }
+
+        for (int i = numBands; i < MAX_BANDS; ++i)
+        {
+            filterBandComponents[i]->typeBox.setVisible(false);
+            filterBandComponents[i]->frequencySlider.setVisible(false);
+            filterBandComponents[i]->qSlider.setVisible(false);
+            filterBandComponents[i]->gainSlider.setVisible(false);
+        }
     }
 }
 
@@ -206,6 +238,22 @@ void HayesEQAudioProcessorEditor::comboBoxChanged(juce::ComboBox* comboBoxThatHa
     for (int i = 0; i < filterBandComponents.size(); ++i)
         if (comboBoxThatHasChanged == &(filterBandComponents[i]->typeBox))
             filterBandComponents[i]->gainSlider.setEnabled(isPeakFilterSelected(i));
+}
+
+void HayesEQAudioProcessorEditor::buttonClicked(juce::Button* button)
+{
+    if (button == &zoomButton)
+    {
+        if (button->getToggleState())
+        {  
+            zoomButton.setToggleState(false, juce::NotificationType::dontSendNotification);
+        }
+        else
+        {
+            zoomButton.setToggleState(true, juce::NotificationType::dontSendNotification);
+        }
+        resized();
+    }
 }
 
 void HayesEQAudioProcessorEditor::paint(juce::Graphics& g)
