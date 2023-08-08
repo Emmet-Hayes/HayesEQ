@@ -64,6 +64,8 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
   
     spectrumPlotComponent = std::make_unique<SpectrumScopeComponent<float>>(processor.audioBufferQueue, customLookAndFeel);
     addAndMakeVisible(spectrumPlotComponent.get());
+    filterControl = std::make_unique<FilterControl>(processor, this);
+    addAndMakeVisible(filterControl.get());
 
     zoomButton.setToggleable(true);
     zoomButton.setLookAndFeel(&customLookAndFeel);
@@ -154,7 +156,8 @@ void HayesEQAudioProcessorEditor::resized()
     setBoundsAndApplyScaling(numBandsBox, 440, 5, 50, 25);
     if (zoomButton.getToggleState())
     {
-        setBoundsAndApplyScaling(*spectrumPlotComponent, 0, 30, 500, 470);
+        setBoundsAndApplyScaling(*spectrumPlotComponent, 10, 30, 480, 470);
+        setBoundsAndApplyScaling(*filterControl, 10, 21, 480, 470);
         setBoundsAndApplyScaling(zoomButton, 470, 470, 20, 20);
 
         typeLabel.setVisible(false);
@@ -173,6 +176,7 @@ void HayesEQAudioProcessorEditor::resized()
     else
     {
         setBoundsAndApplyScaling(*spectrumPlotComponent, 10, 30, 480, 170);
+        setBoundsAndApplyScaling(*filterControl, 10, 21, 480, 170);
         setBoundsAndApplyScaling(zoomButton, 470, 200, 20, 20);
 
         setBoundsAndApplyScaling(typeLabel, 150, 207, 200, 25);
@@ -225,6 +229,13 @@ void HayesEQAudioProcessorEditor::resized()
 void HayesEQAudioProcessorEditor::timerCallback()
 {
     resized();
+}
+
+IIRFilterBandComponent* HayesEQAudioProcessorEditor::getFilterBandAtIndex(int index)
+{
+    if (index >= filterBandComponents.size())
+        return filterBandComponents[0].get();
+    return filterBandComponents[index].get();
 }
 
 void HayesEQAudioProcessorEditor::comboBoxChanged(juce::ComboBox* comboBoxThatHasChanged)

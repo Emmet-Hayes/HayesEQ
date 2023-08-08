@@ -3,6 +3,7 @@
 #include "../../Common/BaseAudioProcessorEditor.h"
 #include "../../Common/CustomLookAndFeel.h"
 #include "../../Common/PresetBar.h"
+#include "FilterControl.h"
 
 class IIRFilterBandComponent;
 
@@ -21,6 +22,8 @@ public:
     void buttonClicked(juce::Button* button) override;
     void timerCallback() override;
 
+    IIRFilterBandComponent* getFilterBandAtIndex(int index);
+
 private:
     void addAllPanelComponents();
     void createIIRComboBox(int index, const char* guilabel, const char* treelabel, 
@@ -35,6 +38,7 @@ private:
     
     std::vector<std::unique_ptr<IIRFilterBandComponent>> filterBandComponents;
     std::unique_ptr<SpectrumScopeComponent<float>> spectrumPlotComponent;
+    std::unique_ptr<FilterControl> filterControl;
     juce::TextButton zoomButton;
     
     juce::ComboBox numBandsBox;

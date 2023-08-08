@@ -35,6 +35,10 @@ void HayesEQAudioProcessor::prepareToPlay(double sr, int samplesPerBlock)
     updateParameters();
     for (int i = 0; i < MAX_BANDS; ++i)
         iirs[i].prepare(spec);
+
+    // Ensure mWetBuffer is correctly initialized
+    mWetBuffer.setSize(getTotalNumOutputChannels(), samplesPerBlock);
+    mWetBuffer.clear();
 }
 
 
@@ -97,4 +101,39 @@ void HayesEQAudioProcessor::updateParameters()
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new HayesEQAudioProcessor();
+}
+
+void HayesEQAudioProcessor::setHistoryArray()
+{
+    for (int channel = 0; channel < getTotalNumOutputChannels(); ++channel)
+    {
+        int bufferSamples = 0;
+        float* channelData;
+        channelData = mWetBuffer.getWritePointer(channel);
+        bufferSamples = mWetBuffer.getNumSamples();
+
+        for (int sample = 0; sample < bufferSamples; ++sample)
+        {
+            // mDelay is delayed clean signal
+            if (sample % 10 == 0)
+            {
+                if (channel == 0)
+                {
+                    historyArrayL.add(channelData[sample]);
+                    if (historyArrayL.size() > historyLength)
+                    {
+                        historyArrayL.remove(0);
+                    }
+                }
+                else if (channel == 1)
+                {
+                    historyArrayR.add(channelData[sample]);
+                    if (historyArrayR.size() > historyLength)
+                    {
+                        historyArrayR.remove(0);
+                    }
+                }
+            }
+        }
+    }
 }

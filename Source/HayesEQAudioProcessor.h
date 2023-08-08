@@ -2,8 +2,9 @@
 #include <JuceHeader.h>
 #include "../../Common/SpectrumScopeComponent.h"
 #include "../../Common/BaseAudioProcessor.h"
+#include "AudioHelpers.h"
 
-constexpr int MAX_BANDS = 8;
+
 constexpr int FREQUENCY_POINTS = 128;
 
 class HayesEQAudioProcessor : public BaseAudioProcessor
@@ -17,10 +18,17 @@ public:
     
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout() override;
     void updateParameters();
+
+    void setHistoryArray();
     
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> iirs[MAX_BANDS];
     
     double sampleRate = 44100.0;
+
+    juce::AudioBuffer<float> mWetBuffer;
+    juce::Array<float> historyArrayL;
+    juce::Array<float> historyArrayR;
+    int historyLength = 400;
 
     AudioBufferQueue<float> audioBufferQueue;
     SpectrumScopeDataCollector<float> scopeDataCollector { audioBufferQueue };
