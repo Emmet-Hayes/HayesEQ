@@ -57,9 +57,9 @@ ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts);
 
 CoefficientsPtr makePeakFilter(const ChainSettings& chainSettings, double sampleRate, int index);
 
-CoefficientsPtr makeLowcutQFilter(const ChainSettings& chainSettings, double sampleRate, int index);
+CoefficientsPtr makeLowcutFilter(const ChainSettings& chainSettings, double sampleRate, int index);
 
-CoefficientsPtr makeHighcutQFilter(const ChainSettings& chainSettings, double sampleRate, int index);
+CoefficientsPtr makeHighcutFilter(const ChainSettings& chainSettings, double sampleRate, int index);
 
 CoefficientsPtr makeNotchFilter(const ChainSettings& chainSettings, double sampleRate, int index);
 

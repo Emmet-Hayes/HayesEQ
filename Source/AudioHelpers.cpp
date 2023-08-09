@@ -31,20 +31,18 @@ CoefficientsPtr makePeakFilter(const ChainSettings& chainSettings, double sample
         juce::Decibels::decibelsToGain(chainSettings.gains[index]));
 }
 
-CoefficientsPtr makeLowcutQFilter(const ChainSettings& chainSettings, double sampleRate, int index)
+CoefficientsPtr makeLowcutFilter(const ChainSettings& chainSettings, double sampleRate, int index)
 {
-    return juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
+    return juce::dsp::IIR::Coefficients<float>::makeLowPass(sampleRate,
         chainSettings.freqs[index],
-        chainSettings.qs[index],
-        juce::Decibels::decibelsToGain(chainSettings.gains[index]));
+        chainSettings.qs[index]);
 }
 
-CoefficientsPtr makeHighcutQFilter(const ChainSettings& chainSettings, double sampleRate, int index)
+CoefficientsPtr makeHighcutFilter(const ChainSettings& chainSettings, double sampleRate, int index)
 {
-    return juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
+    return juce::dsp::IIR::Coefficients<float>::makeHighPass(sampleRate,
         chainSettings.freqs[index],
-        chainSettings.qs[index],
-        juce::Decibels::decibelsToGain(chainSettings.gains[index]));
+        chainSettings.qs[index]);
 }
 
 CoefficientsPtr makeNotchFilter(const ChainSettings& chainSettings, double sampleRate, int index)

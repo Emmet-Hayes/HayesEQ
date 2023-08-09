@@ -57,13 +57,13 @@ private:
             }
             case 2:
             {
-                auto lowCutQCoefficients = makeLowcutQFilter(chainSettings, processor.getSampleRate(), Index);
+                auto lowCutQCoefficients = makeLowcutFilter(chainSettings, processor.getSampleRate(), Index);
                 updateCoefficients(monoChain.get<Index>().coefficients, lowCutQCoefficients);
                 break;
             }
             case 3:
             {
-                auto highCutQCoefficients = makeHighcutQFilter(chainSettings, processor.getSampleRate(), Index);
+                auto highCutQCoefficients = makeHighcutFilter(chainSettings, processor.getSampleRate(), Index);
                 updateCoefficients(monoChain.get<Index>().coefficients, highCutQCoefficients);
                 break;
             }

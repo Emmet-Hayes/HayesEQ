@@ -40,12 +40,8 @@ void FilterControl::paint (juce::Graphics& g)
     for (int i = numActiveBands; i < MAX_BANDS; ++i)
         draggableButtons[i].setState(false);
         
-    g.setColour(juce::Colours::hotpink.withBrightness(0.8f));
-    g.strokePath(responseCurve, juce::PathStrokeType(2.0f));
-        
-    g.setColour(juce::Colours::hotpink.withBrightness(0.8f).withAlpha(0.2f));
-    g.fillPath(responseCurve);
-    
+    //g.setColour(juce::Colours::hotpink.withBrightness(0.8f));
+
     int size = static_cast<int>(getWidth() / 1000.0f * 15);
     
     int buttonX = static_cast<int>(getMouseXYRelative().getX() - size / 2.0f);
@@ -59,11 +55,25 @@ void FilterControl::paint (juce::Graphics& g)
     if (buttonY > getHeight() / 48.0f * (24 + 15) - size / 2.0f)
         buttonY = static_cast<int>(getHeight() / 48.0f * (24 + 15) - size / 2.0f);
     
+    // Create the gradient
+    juce::ColourGradient gradient(
+        juce::Colours::hotpink.withBrightness(0.8f),  // Starting color (at the top)
+        0, 0,  // Starting position
+        juce::Colours::hotpink.withBrightness(0.8f).withAlpha(0.0f),  // Ending color (at the bottom)
+        0, static_cast<float>(getHeight()),  // Ending position
+        false  // Not radial
+    );
+
+    // Use the gradient to fill the path
+    g.setGradientFill(gradient);
+    g.strokePath(responseCurve, juce::PathStrokeType(2.0f));
+    g.fillPath(responseCurve);
+
     for (int i = 0; i < MAX_BANDS; ++i)
     {
         if (draggableButtons[i].isMouseButtonDown())
         {
-            draggableButtons[i].setBounds(buttonX * (i + 1), buttonY * (i + 1), size, size);
+            draggableButtons[i].setBounds(buttonX, buttonY, size, size);
             editor->getFilterBandAtIndex(i)->frequencySlider.setValue(juce::mapToLog10(static_cast<double> (getMouseXYRelative().getX() / static_cast<double> (getWidth())), 20.0, 20000.0));
             editor->getFilterBandAtIndex(i)->gainSlider.setValue(15.0f * (getHeight() / 2.0f - getMouseXYRelative().getY()) / (getHeight() / 48.0f * 15.0f));
         }
@@ -146,7 +156,7 @@ void FilterControl::updateResponseCurve()
         double mag = 1.0f;
         auto freq = juce::mapToLog10 (double (i) / double (w), 20.0, 20000.0);
         
-        if (! monoChain.isBypassed<0>())
+        if (!monoChain.isBypassed<0>())
             mag *= monoChain.get<0>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
         if (!monoChain.isBypassed<1>())
             mag *= monoChain.get<1>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
@@ -167,7 +177,7 @@ void FilterControl::updateResponseCurve()
     }
     
     responseCurve.clear();
-    
+
     const double outputMin = getHeight();
     const double outputMax = 0;
     auto map = [outputMin, outputMax] (double input)
@@ -175,8 +185,8 @@ void FilterControl::updateResponseCurve()
         return juce::jmap (input, -24.0, 24.0, outputMin, outputMax);
     };
     
-    juce::Point<float> startPoint (getWidth() / 24, static_cast<float>(getHeight() - (getHeight() / 14)));
-    juce::Point<float> endPoint (static_cast<float>(getWidth() - (getWidth() / 130)), static_cast<float>(getHeight() - (getHeight() / 14)));
+    juce::Point<float> startPoint (getWidth() / 24, static_cast<float>(getHeight()));
+    juce::Point<float> endPoint (static_cast<float>(getWidth() - (getWidth() / 130)), static_cast<float>(getHeight()));
     
     responseCurve.startNewSubPath (startPoint);
     
