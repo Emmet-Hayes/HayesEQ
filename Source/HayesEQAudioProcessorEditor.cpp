@@ -12,12 +12,14 @@ HayesEQAudioProcessorEditor::HayesEQAudioProcessorEditor(HayesEQAudioProcessor& 
 
 HayesEQAudioProcessorEditor::~HayesEQAudioProcessorEditor()
 {
+    setLookAndFeel(nullptr);
     stopTimer();
     numBandsBox.removeListener(this);
 }
 
 void HayesEQAudioProcessorEditor::addAllPanelComponents()
 {
+    setLookAndFeel(&customLookAndFeel);
     using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     
@@ -27,29 +29,24 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
     addAndMakeVisible(numBandsLabel);
     numBandsBox.addItemList({ "1", "2", "3", "4", "5", "6", "7", "8" }, 1);
     numBandsBox.setJustificationType(juce::Justification::centred);
-    numBandsBox.setLookAndFeel(&customLookAndFeel);
     numBandsBox.addListener(this);
     addAndMakeVisible(numBandsBox);
     numBandsAttachment = std::make_unique<ComboBoxAttachment>(processor.apvts, "numbands", numBandsBox);
     
     typeLabel.setText("Filter Type", juce::dontSendNotification);
     typeLabel.setJustificationType(juce::Justification::centred);
-    typeLabel.setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(typeLabel);
 
     frequencyLabel.setText("Frequency", juce::dontSendNotification);
     frequencyLabel.setJustificationType(juce::Justification::centred);
-    frequencyLabel.setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(frequencyLabel);
 
     qLabel.setText("Q", juce::dontSendNotification);
     qLabel.setJustificationType(juce::Justification::centred);
-    qLabel.setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(qLabel);
 
     gainLabel.setText("Gain", juce::dontSendNotification);
     gainLabel.setJustificationType(juce::Justification::centred);
-    gainLabel.setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(gainLabel);
 
     for (int i = 0; i < MAX_BANDS; ++i)
@@ -68,7 +65,6 @@ void HayesEQAudioProcessorEditor::addAllPanelComponents()
     addAndMakeVisible(filterControl.get());
 
     zoomButton.setToggleable(true);
-    zoomButton.setLookAndFeel(&customLookAndFeel);
     zoomButton.addListener(this);
     addAndMakeVisible(zoomButton);
     
@@ -92,7 +88,6 @@ void HayesEQAudioProcessorEditor::createIIRComboBox(int index, const char* /*gui
         
     filterBandComponents[index]->typeBox.addItemList(itemList, defaultItem);
     filterBandComponents[index]->typeBox.setJustificationType(juce::Justification::centred);
-    filterBandComponents[index]->typeBox.setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(filterBandComponents[index]->typeBox);
     filterBandComponents[index]->typeAttachment = std::make_unique<ComboBoxAttachment>(processor.apvts,
         tstr, filterBandComponents[index]->typeBox);
@@ -105,14 +100,12 @@ void HayesEQAudioProcessorEditor::createIIRSliders(int index)
     std::string gstr = "gain" + std::to_string(index);
     filterBandComponents[index]->frequencySlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     filterBandComponents[index]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
-    filterBandComponents[index]->frequencySlider.setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(filterBandComponents[index]->frequencySlider);
     filterBandComponents[index]->frequencyAttachment = std::make_unique<Attachment>(processor.apvts,
         fstr, filterBandComponents[index]->frequencySlider);
 
     filterBandComponents[index]->qSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     filterBandComponents[index]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
-    filterBandComponents[index]->qSlider.setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(filterBandComponents[index]->qSlider);
     filterBandComponents[index]->qAttachment = std::make_unique<Attachment>(processor.apvts,
         qstr, filterBandComponents[index]->qSlider);
@@ -120,12 +113,10 @@ void HayesEQAudioProcessorEditor::createIIRSliders(int index)
     filterBandComponents[index]->gainSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     filterBandComponents[index]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
     filterBandComponents[index]->gainSlider.setNumDecimalPlacesToDisplay(2);
-    filterBandComponents[index]->gainSlider.setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(filterBandComponents[index]->gainSlider);
     filterBandComponents[index]->gainAttachment = std::make_unique<Attachment>(processor.apvts, 
         gstr, filterBandComponents[index]->gainSlider);
 
-    presetBar.setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(presetBar);
 }
 

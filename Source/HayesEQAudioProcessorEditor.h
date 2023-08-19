@@ -31,10 +31,13 @@ private:
     void createIIRSliders(int index);
     bool isPeakFilterSelected(int index) const;
     
-    PresetBar presetBar;
-
     CustomLookAndFeel customLookAndFeel;
+    
+    HayesEQAudioProcessor& processor;
+    
     juce::Image image;
+    
+    PresetBar presetBar;
     
     std::vector<std::unique_ptr<IIRFilterBandComponent>> filterBandComponents;
     std::unique_ptr<SpectrumScopeComponent<float>> spectrumPlotComponent;
@@ -51,7 +54,6 @@ private:
     float windowScaleW = 1.0f;
     float windowScaleH = 1.0f;
 
-    HayesEQAudioProcessor& processor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HayesEQAudioProcessorEditor)
 };
