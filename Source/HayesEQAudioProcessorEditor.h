@@ -24,6 +24,8 @@ public:
 
     IIRFilterBandComponent* getFilterBandAtIndex(int index);
 
+    int numBands = 8;
+  
 private:
     void addAllPanelComponents();
     void createIIRComboBox(int index, const char* guilabel, const char* treelabel, 
@@ -47,7 +49,7 @@ private:
     juce::ComboBox numBandsBox;
     juce::Label numBandsLabel, typeLabel, frequencyLabel, qLabel, gainLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> numBandsAttachment;
-    int numBands = 8;
+
     
     std::unique_ptr<juce::ResizableCornerComponent> resizer;
     std::unique_ptr<juce::ComponentBoundsConstrainer> resizerConstrainer;

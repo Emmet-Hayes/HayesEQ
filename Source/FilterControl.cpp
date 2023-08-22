@@ -35,25 +35,25 @@ void FilterControl::paint (juce::Graphics& g)
     numActiveBands = static_cast<int>(*processor.apvts.getRawParameterValue(NUM_ACTIVE_BANDS_ID));
 
     for (int i = 0 ; i < numActiveBands; ++i)
-        draggableButtons[i].setState (true);
+        draggableButtons[i].setState(true);
 
     for (int i = numActiveBands; i < MAX_BANDS; ++i)
         draggableButtons[i].setState(false);
         
     //g.setColour(juce::Colours::hotpink.withBrightness(0.8f));
 
-    int size = static_cast<int>(getWidth() / 1000.0f * 15);
+    int size = static_cast<int>(getWidth() / 1000.0f * 24);
     
     int buttonX = static_cast<int>(getMouseXYRelative().getX() - size / 2.0f);
     int buttonY = static_cast<int>(getMouseXYRelative().getY() - size / 2.0f);
-    if (buttonX < 0)
-        buttonX = 0;
-    if (buttonX > getWidth())
-        buttonX = getWidth() - size;
-    if (buttonY < getHeight() / 48.0f * (24 - 15) - size / 2.0f)
-        buttonY = static_cast<int>(getHeight() / 48.0f * (24 - 15) - size / 2.0f);
-    if (buttonY > getHeight() / 48.0f * (24 + 15) - size / 2.0f)
-        buttonY = static_cast<int>(getHeight() / 48.0f * (24 + 15) - size / 2.0f);
+    if (buttonX < 20)
+        buttonX = 20;
+    if (buttonX > getWidth() - 10)
+        buttonX = getWidth() - 10;
+    if (buttonY < 10)
+        buttonY = 10;
+    if (buttonY > getHeight() - 20)
+        buttonY = getHeight() - 20;
     
     // Create the gradient
     juce::ColourGradient gradient(
@@ -88,17 +88,26 @@ void FilterControl::resized()
 
 void FilterControl::setDraggableButtonBounds()
 {
-    int size = static_cast<int>(getWidth() / 1000.0f * 15);
+    int size = static_cast<int>(getWidth() / 1000.0f * 24);
 
     for (int i = 0; i < MAX_BANDS; ++i)
     {
         double freq = static_cast<double>(*processor.apvts.getRawParameterValue("frequency" + std::to_string(i)));
         float gain = *processor.apvts.getRawParameterValue("gain" + std::to_string(i));
 
-        int filterX = static_cast<int>(getWidth() * juce::mapFromLog10(freq, 20.0, 20000.0));
-        int filterY = static_cast<int>(getHeight() / 2.0f - (getHeight() / 48.0f * gain));
+        int filterX = static_cast<int>(getWidth() * juce::mapFromLog10(freq, 20.0, 20000.0))  - size / 2;
+        int filterY = static_cast<int>(getHeight() / 2.0f - (getHeight() / 48.0f * gain))  - size / 2;
 
-        draggableButtons[i].setBounds(filterX - size / 2, filterY - size / 2, size, size);
+        if (filterX < 20)
+            filterX = 20;
+        if (filterX > getWidth() - 10)
+            filterX = getWidth() - 10;
+        if (filterY < 10)
+            filterY = 10;
+        if (filterY > getHeight() - 20)
+            filterY = getHeight() - 20;
+
+        draggableButtons[i].setBounds(filterX, filterY, size, size);
     }
 }
 
@@ -145,37 +154,43 @@ void FilterControl::updateChain()
 void FilterControl::updateResponseCurve()
 {
     int w = getWidth();
-    
+
     auto sampleRate = processor.getSampleRate();
-    
+
     std::vector<float> mags;
     mags.resize (w);
-    
+
+    for (int i = 0; i < editor->numBands; ++i)
+        draggableButtons[i].setVisible(true);
+
+    for (int i = editor->numBands; i < MAX_BANDS; ++i)
+        draggableButtons[i].setVisible(false);
+
     for (int i = 0; i < w; ++i)
     {
         double mag = 1.0f;
         auto freq = juce::mapToLog10 (double (i) / double (w), 20.0, 20000.0);
-        
-        if (!monoChain.isBypassed<0>())
+
+        if (draggableButtons[0].getState())
             mag *= monoChain.get<0>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
-        if (!monoChain.isBypassed<1>())
+        if (draggableButtons[1].getState())
             mag *= monoChain.get<1>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
-        if (!monoChain.isBypassed<2>())
+        if (draggableButtons[2].getState())
             mag *= monoChain.get<2>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
-        if (!monoChain.isBypassed<3>())
+        if (draggableButtons[3].getState())
             mag *= monoChain.get<3>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
-        if (!monoChain.isBypassed<4>())
+        if (draggableButtons[4].getState())
             mag *= monoChain.get<4>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
-        if (!monoChain.isBypassed<5>())
+        if (draggableButtons[5].getState())
             mag *= monoChain.get<5>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
-        if (!monoChain.isBypassed<6>())
+        if (draggableButtons[6].getState())
             mag *= monoChain.get<6>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
-        if (!monoChain.isBypassed<7>())
+        if (draggableButtons[7].getState())
             mag *= monoChain.get<7>().coefficients->getMagnitudeForFrequency(freq, sampleRate);
 
         mags[i] = static_cast<float>(juce::Decibels::gainToDecibels(mag));
     }
-    
+
     responseCurve.clear();
 
     const double outputMin = getHeight();
@@ -184,12 +199,12 @@ void FilterControl::updateResponseCurve()
     {
         return juce::jmap (input, -24.0, 24.0, outputMin, outputMax);
     };
-    
+
     juce::Point<float> startPoint (getWidth() / 24, static_cast<float>(getHeight()));
     juce::Point<float> endPoint (static_cast<float>(getWidth() - (getWidth() / 130)), static_cast<float>(getHeight()));
-    
+
     responseCurve.startNewSubPath (startPoint);
-    
+
     const int skipStart = 22;
     const int skipEnd = 2;
     for (size_t i = skipStart; i < mags.size() - skipEnd; ++i)

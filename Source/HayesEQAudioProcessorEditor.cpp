@@ -3,8 +3,8 @@
 
 HayesEQAudioProcessorEditor::HayesEQAudioProcessorEditor(HayesEQAudioProcessor& p)
 :   BaseAudioProcessorEditor { p }
-,   presetBar { p }
 ,   processor { p }
+,   presetBar { p }
 {
     addAllPanelComponents();
     startTimerHz(60);
@@ -135,11 +135,8 @@ void HayesEQAudioProcessorEditor::resized()
 
     auto setBoundsAndApplyScaling = [&](juce::Component& c, int x, int y, int w, int h)
     {
-        int sx = static_cast<int>(x * windowScaleW);
-        int sy = static_cast<int>(y * windowScaleH);
-        int sw = static_cast<int>(w * windowScaleW);
-        int sh = static_cast<int>(h * windowScaleH);
-        c.setBounds(sx, sy, sw, sh);
+        c.setBounds(static_cast<int>(x * windowScaleW), static_cast<int>(y * windowScaleH),
+                  static_cast<int>(w * windowScaleW), static_cast<int>(h * windowScaleH));
     };
 
     setBoundsAndApplyScaling(presetBar, 0, 5, 300, 25);
