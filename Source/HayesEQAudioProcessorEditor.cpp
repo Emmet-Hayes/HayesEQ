@@ -98,19 +98,19 @@ void HayesEQAudioProcessorEditor::createIIRSliders(int index)
     std::string fstr = "frequency" + std::to_string(index);
     std::string qstr = "q" + std::to_string(index);
     std::string gstr = "gain" + std::to_string(index);
-    filterBandComponents[index]->frequencySlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    filterBandComponents[index]->frequencySlider.setSliderStyle(juce::Slider::Rotary);
     filterBandComponents[index]->frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
     addAndMakeVisible(filterBandComponents[index]->frequencySlider);
     filterBandComponents[index]->frequencyAttachment = std::make_unique<Attachment>(processor.apvts,
         fstr, filterBandComponents[index]->frequencySlider);
 
-    filterBandComponents[index]->qSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    filterBandComponents[index]->qSlider.setSliderStyle(juce::Slider::Rotary);
     filterBandComponents[index]->qSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
     addAndMakeVisible(filterBandComponents[index]->qSlider);
     filterBandComponents[index]->qAttachment = std::make_unique<Attachment>(processor.apvts,
         qstr, filterBandComponents[index]->qSlider);
 
-    filterBandComponents[index]->gainSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    filterBandComponents[index]->gainSlider.setSliderStyle(juce::Slider::Rotary);
     filterBandComponents[index]->gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 20);
     filterBandComponents[index]->gainSlider.setNumDecimalPlacesToDisplay(2);
     addAndMakeVisible(filterBandComponents[index]->gainSlider);
