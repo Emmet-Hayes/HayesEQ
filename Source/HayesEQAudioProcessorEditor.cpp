@@ -6,8 +6,10 @@ HayesEQAudioProcessorEditor::HayesEQAudioProcessorEditor(HayesEQAudioProcessor& 
 ,   processor { p }
 ,   presetBar { p }
 {
-    addAllPanelComponents();
     startTimerHz(60);
+    setLookAndFeel(&customLookAndFeel);
+    addAllGUIComponents();
+
 }
 
 HayesEQAudioProcessorEditor::~HayesEQAudioProcessorEditor()
@@ -17,9 +19,8 @@ HayesEQAudioProcessorEditor::~HayesEQAudioProcessorEditor()
     numBandsBox.removeListener(this);
 }
 
-void HayesEQAudioProcessorEditor::addAllPanelComponents()
+void HayesEQAudioProcessorEditor::addAllGUIComponents()
 {
-    setLookAndFeel(&customLookAndFeel);
     using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     

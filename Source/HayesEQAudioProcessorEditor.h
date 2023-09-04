@@ -27,7 +27,7 @@ public:
     int numBands = 8;
   
 private:
-    void addAllPanelComponents();
+    void addAllGUIComponents();
     void createIIRComboBox(int index, const char* guilabel, const char* treelabel, 
                            const juce::StringArray& itemList, int defaultItem = 1);
     void createIIRSliders(int index);
