@@ -1,9 +1,9 @@
 #pragma once
 
-#include <JuceHeader.h>
-
 #include "../../Common/DraggableButton.h"
+
 #include "HayesEQAudioProcessor.h"
+
 
 class HayesEQAudioProcessorEditor;
 

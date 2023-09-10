@@ -1,5 +1,7 @@
 #pragma once
+
 #include <JuceHeader.h>
+
 
 constexpr int MAX_BANDS = 8;
 

@@ -1,6 +1,7 @@
 #include "HayesEQAudioProcessorEditor.h"
 #include "IIRFilterBandComponent.h"
 
+
 HayesEQAudioProcessorEditor::HayesEQAudioProcessorEditor(HayesEQAudioProcessor& p)
 :   BaseAudioProcessorEditor { p }
 ,   processor { p }

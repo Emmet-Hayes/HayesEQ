@@ -1,9 +1,12 @@
 #pragma once
-#include "HayesEQAudioProcessor.h"
+
 #include "../../Common/BaseAudioProcessorEditor.h"
 #include "../../Common/CustomLookAndFeel.h"
 #include "../../Common/PresetBar.h"
+
+#include "HayesEQAudioProcessor.h"
 #include "FilterControl.h"
+
 
 class IIRFilterBandComponent;
 

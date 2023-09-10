@@ -1,6 +1,8 @@
+#include "../../Common/Utilities.h"
+
 #include "HayesEQAudioProcessor.h"
 #include "HayesEQAudioProcessorEditor.h"
-#include "../../Common/Utilities.h"
+
 
 HayesEQAudioProcessor::HayesEQAudioProcessor()
 :   BaseAudioProcessor(createParameterLayout())

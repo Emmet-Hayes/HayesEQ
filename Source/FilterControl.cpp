@@ -5,6 +5,7 @@
 
 #define NUM_ACTIVE_BANDS_ID "numbands"
 
+
 FilterControl::FilterControl (HayesEQAudioProcessor& p, HayesEQAudioProcessorEditor* panel) 
 :   processor (p)
 ,   editor (panel)

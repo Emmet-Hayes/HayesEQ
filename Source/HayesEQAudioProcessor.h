@@ -1,7 +1,8 @@
 #pragma once
-#include <JuceHeader.h>
+
 #include "../../Common/SpectrumScopeComponent.h"
 #include "../../Common/BaseAudioProcessor.h"
+
 #include "AudioHelpers.h"
 
 
